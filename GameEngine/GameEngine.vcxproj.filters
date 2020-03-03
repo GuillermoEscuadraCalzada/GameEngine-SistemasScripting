@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Graphics">
+      <UniqueIdentifier>{3a813d16-156c-4820-859a-ad46f2c5ac2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Graphics\Textures">
+      <UniqueIdentifier>{559e6550-d981-410d-872c-57538ceff2c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Graphics\Graphics">
+      <UniqueIdentifier>{f7f850c4-253a-427f-a9d6-30eeab516caa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Graphics\Animated Textures">
+      <UniqueIdentifier>{4530028c-303c-4d0b-a2bd-f655a0b609f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\GameObject">
+      <UniqueIdentifier>{eb22c05c-3ab4-493f-b6ca-cbc4fc8e695c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\GameObject\Vector2">
+      <UniqueIdentifier>{41a048a3-b31c-4b8d-8b7c-0bb4f0e7c240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\GameObject\GameObject">
+      <UniqueIdentifier>{d7cfe404-d3f1-40ea-b190-eabf6a3ec685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Screens">
+      <UniqueIdentifier>{f8014dfb-3aae-4c0c-9949-fd67d28cb387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Screens\GameScreen">
+      <UniqueIdentifier>{bb948a1d-c878-4eaf-bc98-8da52e83a402}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Screens\ScreenManager">
+      <UniqueIdentifier>{45be89ed-9b95-4690-8f3f-80eea301b1b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Contenedores">
+      <UniqueIdentifier>{b6ebb752-f012-468f-9f40-253ed05c04ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Config Ini">
+      <UniqueIdentifier>{d82ce718-f53e-45b6-b5a4-f850beeb653a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager">
+      <UniqueIdentifier>{1f3c3c90-c49b-4bb2-8d3f-0d80fc855b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager\Asset Manager">
+      <UniqueIdentifier>{a68d0f40-2c6c-4a6b-b610-277dbe9aeff6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager\Audio Manager">
+      <UniqueIdentifier>{c16a0d4c-ae79-4621-88f6-69cac346f847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager\GameManager">
+      <UniqueIdentifier>{9d8a3d01-c001-48be-9da0-2783bcf1fb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager\Time">
+      <UniqueIdentifier>{60c99609-0277-4717-8625-b93149f1ec80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager\Input Manage">
+      <UniqueIdentifier>{97d470b9-0e7c-4e1e-b5a2-014c8b98483a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Game Manager\StackAllocator">
+      <UniqueIdentifier>{69156051-4167-4e98-be89-85a9fb39c762}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Graphics\Graphics.cpp">
+      <Filter>Archivos de encabezado\Graphics\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture\Texture.cpp">
+      <Filter>Archivos de encabezado\Graphics\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\AnimatedTextures\AnimatedTexture.cpp">
+      <Filter>Archivos de encabezado\Graphics\Animated Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\GameObject.cpp">
+      <Filter>Archivos de encabezado\GameObject\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Vector2.cpp">
+      <Filter>Archivos de encabezado\GameObject\Vector2</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuInicio\StartScreen\ScreenManager.cpp">
+      <Filter>Archivos de encabezado\Screens\ScreenManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuInicio\GameScreen\GameScreen.cpp">
+      <Filter>Archivos de encabezado\Screens\GameScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigIni\ConfigIni.cpp">
+      <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigIni\INIReader.cpp">
+      <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\AssetManager\AssetManager.cpp">
+      <Filter>Archivos de encabezado\Game Manager\Asset Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\AudioManager\AudioManager.cpp">
+      <Filter>Archivos de encabezado\Game Manager\Audio Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\GameManager\GameManager.cpp">
+      <Filter>Archivos de encabezado\Game Manager\GameManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\Timer\Timer.cpp">
+      <Filter>Archivos de encabezado\Game Manager\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\InputManager\InputManager.cpp">
+      <Filter>Archivos de encabezado\Game Manager\Input Manage</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\StackAllocator\StackAllocator.cpp">
+      <Filter>Archivos de encabezado\Game Manager\StackAllocator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ini.c">
+      <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Graphics\Graphics\Graphics.h">
+      <Filter>Archivos de encabezado\Graphics\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture\Texture.h">
+      <Filter>Archivos de encabezado\Graphics\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\AnimatedTextures\AnimatedTexture.h">
+      <Filter>Archivos de encabezado\Graphics\Animated Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\GameObject.h">
+      <Filter>Archivos de encabezado\GameObject\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Vector2.h">
+      <Filter>Archivos de encabezado\GameObject\Vector2</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuInicio\StartScreen\ScreenManager.h">
+      <Filter>Archivos de encabezado\Screens\ScreenManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuInicio\GameScreen\GameScreen.h">
+      <Filter>Archivos de encabezado\Screens\GameScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="myVector.h">
+      <Filter>Archivos de encabezado\Contenedores</Filter>
+    </ClInclude>
+    <ClInclude Include="Contenedores\Lista\AssetList.h">
+      <Filter>Archivos de encabezado\Contenedores</Filter>
+    </ClInclude>
+    <ClInclude Include="Contenedores\Nodo\Nodo.h">
+      <Filter>Archivos de encabezado\Contenedores</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigIni\ConfigIni.h">
+      <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigIni\INIReader.h">
+      <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\AssetManager\AssetManager.h">
+      <Filter>Archivos de encabezado\Game Manager\Asset Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\AudioManager\AudioManager.h">
+      <Filter>Archivos de encabezado\Game Manager\Audio Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\GameManager\GameManager.h">
+      <Filter>Archivos de encabezado\Game Manager\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\Timer\Timer.h">
+      <Filter>Archivos de encabezado\Game Manager\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\InputManager\InputManager.h">
+      <Filter>Archivos de encabezado\Game Manager\Input Manage</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\StackAllocator\StackAllocator.h">
+      <Filter>Archivos de encabezado\Game Manager\StackAllocator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ini.h">
+      <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
