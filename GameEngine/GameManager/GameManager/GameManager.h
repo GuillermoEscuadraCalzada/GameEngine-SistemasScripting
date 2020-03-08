@@ -6,7 +6,7 @@
 #include "../../MenuInicio/StartScreen/ScreenManager.h"
 #include "../../ConfigIni/ConfigIni.h"
 #include "../../ConfigIni/INIReader.h"
-#include "../StackAllocator/StackAllocator.h"
+//#include "../StackAllocator/StackAllocator.h"
 #include <ctime>
 #include <Windows.h>
 class GameManager

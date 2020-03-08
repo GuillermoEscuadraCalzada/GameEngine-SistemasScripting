@@ -1,6 +1,5 @@
 #include "GameManager.h"
 GameManager* GameManager::ptr = nullptr;
-AnimatedTexture* hollowKnight;
 
 
 /*Constructor principal de GameManager*/
@@ -21,9 +20,9 @@ GameManager::GameManager()
 		inputMGR = InputManager::getPtr();
 		audiMGR = AudioManager::getPTR();
 		screenMGR = ScreenManager::getPTR();
-		
-		buff = stackAllocator->alloc(sizeof(Texture*));
-		screenMGR->Init(buff);
+		//buff = stackAllocator->alloc(sizeof(Texture*));
+		screenMGR->setStackAlloc(stackAllocator);
+		screenMGR->Init();
 
 	} catch(Graphics* graphics) {
 		SetConsoleTextAttribute(hConsole, 4);
@@ -93,9 +92,10 @@ void GameManager::StartUp()
 		graphics->setWidth(reader.GetInteger("window", "width", -1)); //Se setea la anchura de la ventana
 		graphics->setHeight(reader.GetInteger("window", "height", -1)); //Se setea la altura de la ventana
 		thirdMemory = reader.GetInteger("memory", "third", -1);
+
+		/*Inicialización del stack allocator*/
 		clock_t t = clock();
 
-		//asignar 32 MB de memoria dinamica
 		stackAllocator = new StackAllocator(1024 * 1024 * thirdMemory);
 		clock_t dt = clock() - t;
 		SetConsoleTextAttribute(hConsole, 2);

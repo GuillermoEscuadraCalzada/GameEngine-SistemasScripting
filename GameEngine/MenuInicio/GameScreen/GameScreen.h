@@ -1,11 +1,12 @@
 #ifndef  GAMESCREEN_H
 #define GAMESCREEN_H
-#include "../../MenuInicio/StartScreen/StartScreen.h"
+#include "../../GameManager/StackAllocator/StackAllocator.h"
+#include "../../Graphics/AnimatedTextures/AnimatedTexture.h"
+#include "../../GameManager/InputManager/InputManager.h"
 #include "../../GameManager/Timer/Timer.h"
 #include "../../GameObject/GameObject.h"
+#include "../../myVector.h"
 #include <Windows.h>
-#include "../../Graphs/Graph.h"
-//#include "../../GameManager/GameManager/GameManager.h"
 
 class GameScreen : public GameObject
 {
@@ -13,22 +14,23 @@ public:
 	
 	void Update();
 	void Render();
-	void Init(void *);
+	void Init();
 	GameScreen();
 	~GameScreen();
 	myVector<Texture*>* textureList;
-
 	void setBackGround(Texture* backGround);
 	void setCharacter(Texture* backGround);
 
 	Texture* GetBackGround();
 	Texture* GetCharacter();
 
+	void setStackAllocator(StackAllocator* stackAlloc);
 private:
 	float score = 0;
 	bool change = true;
 	int counter = 0;
 	
+	StackAllocator* stackAllocator;
 	InputManager* input;
 	int milisegundos = 0;
 	int segundos = 0;

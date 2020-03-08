@@ -128,7 +128,7 @@ void ConfigIni::StartUp() {
 		initialize->insertValue("height", "800"); //Se crea la variable "heigth"
 		initialize->insertBlankLine(); //Ingresa una línea en blanco
 		initialize->insertSection("memory"); //Se crea una sección
-		initialize->insertValue("third", "300"); //Se crea la variable "heigth"
+		initialize->insertValue("third", "800"); //Se crea la variable "heigth"
 		initialize->insertBlankLine(); //Ingresa una línea en blanco
 		initialize->closeFile(); //Se cierra el archivo
 		SetConsoleTextAttribute(hConsole, 3);

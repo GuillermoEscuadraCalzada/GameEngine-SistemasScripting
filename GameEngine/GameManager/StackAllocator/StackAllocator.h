@@ -11,7 +11,8 @@ public:
 	void clear();
 
 private:
-	int maxSize;
+	//int maxSize;
+	Marker maxSize;
 	void* start;
 	Marker marker;
 	

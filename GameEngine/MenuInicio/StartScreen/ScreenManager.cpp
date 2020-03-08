@@ -7,11 +7,9 @@ ScreenManager::ScreenManager()
 {
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	input = InputManager::getPtr();	  //Apuntador de la clase Input
-	gameScreen = new GameScreen();	  //Se crea un objeto de la clase GameScree
 	currentScreen = play;		     //El enum comienza con la variable start
 
 }
-
 
 /*Destructor de la clase Screen Manager que elimina cada uno de los apuntadores que existan*/
 ScreenManager::~ScreenManager()
@@ -40,14 +38,17 @@ void ScreenManager::Release()
 	instance = nullptr;
 }
 
-void ScreenManager::Init(void * buff)
+void ScreenManager::Init()
 {
 	try
 	{
+		void* buff = stackAllocator->alloc(sizeof(GameScreen*));
+		gameScreen = new (buff)  GameScreen();	  //Se crea un objeto de la clase GameScreen
+		gameScreen->setStackAllocator(stackAllocator);
 		switch(currentScreen)
 		{
 		case play: {
-			gameScreen->Init(buff);
+			gameScreen->Init();
 		}
 		default:
 			break;
@@ -87,6 +88,18 @@ void ScreenManager::Render()
 		break;
 	default:
 		break;
+	}
+}
+
+void ScreenManager::setStackAlloc(StackAllocator* stack)
+{
+	try {
+		if (!stack)
+			throw(stack);
+		
+		stackAllocator = stack;
+	}catch (StackAllocator * stk) {
+		cout << "Null stack allocator" << endl;
 	}
 }
 
