@@ -24,13 +24,13 @@ public:
 	Texture* GetBackGround();
 	Texture* GetCharacter();
 
-	void setStackAllocator(StackAllocator* stackAlloc);
+	//void setStackAllocator(StackAllocator* stackAlloc);
 private:
 	float score = 0;
 	bool change = true;
 	int counter = 0;
 	
-	StackAllocator* stackAllocator;
+	//StackAllocator* stackAllocator;
 	InputManager* input;
 	int milisegundos = 0;
 	int segundos = 0;

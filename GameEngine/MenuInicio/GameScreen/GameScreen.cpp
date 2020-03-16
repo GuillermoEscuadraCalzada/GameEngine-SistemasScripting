@@ -53,18 +53,18 @@ Texture* GameScreen::GetCharacter() {
 
 /*Se establece el stack allocator como uno ya existente para así no chocar entre todos los que ya existen
  *@param[StackAllocator* stackAlloc] el stack que se le pondrá al stack de esta clase*/
-void GameScreen::setStackAllocator(StackAllocator* stackAlloc)
-{
-	try {
-		//Si el stack del parámetro es nulo, lanza un error
-		if (!stackAlloc)
-			throw(stackAlloc);
-		stackAllocator = stackAlloc; //Igualalos
-	}
-	catch (StackAllocator * alloc) {
-		cout << "Null stack allocator" << endl;
-	}
-}
+//void GameScreen::setStackAllocator(StackAllocator* stackAlloc)
+//{
+//	try {
+//		//Si el stack del parámetro es nulo, lanza un error
+//		if (!stackAlloc)
+//			throw(stackAlloc);
+//		stackAllocator = stackAlloc; //Igualalos
+//	}
+//	catch (StackAllocator * alloc) {
+//		cout << "Null stack allocator" << endl;
+//	}
+//}
 
 /*Actualización de la pantalla gameScreen, donde suceden todas las acciones del jugador, disminución del tiempo, etc.*/
 void GameScreen::Update()
@@ -100,11 +100,10 @@ void GameScreen::Render()
  *@param[void * buff] el buffer que permitirá la entrada de todos los elementos*/
 void GameScreen::Init() {
 	try {
-		void* buff = stackAllocator->alloc(sizeof(Texture*));
-		backGround = new (buff) Texture("Fondo_800x800.png", 0, 0, 800, 800);/*setBackGround(new (buff) Texture("Fondo_800x800.png", 0, 0, 800, 800));*/ //Selecciona una textura para el fondo
+		
+		setBackGround(new  Texture("Fondo_800x800.png", 0, 0, 800, 800));/*setBackGround(new (buff) Texture("Fondo_800x800.png", 0, 0, 800, 800));*/ //Selecciona una textura para el fondo
 		GetBackGround()->setPosition(Vector2(400, 400)); //Establece su posición
-		void* buff2 = stackAllocator->alloc(sizeof(Texture*));
-		character = new (buff2) Texture("HollowKnight.png", 0, 0, 179, 185);//setCharacter(new (buff) Texture("HollowKnight.png", 0, 0, 179, 185)); //Establece una nueva imagen para el personaje
+		setCharacter(new  Texture("HollowKnight.png", 0, 0, 179, 185));//setCharacter(new (buff) Texture("HollowKnight.png", 0, 0, 179, 185)); //Establece una nueva imagen para el personaje
 		GetCharacter()->setPosition(Vector2(400, 400)); //Establece su posición
 	} catch(exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);

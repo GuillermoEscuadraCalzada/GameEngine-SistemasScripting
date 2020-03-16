@@ -10,7 +10,7 @@ class ScreenManager
 	InputManager* input;
 	SCREENS currentScreen;
 	static ScreenManager* instance;
-	StackAllocator* stackAllocator;
+	//StackAllocator* stackAllocator;
 
 public:
 	GameScreen* gameScreen;
@@ -19,7 +19,7 @@ public:
 	void Init();
 	void Update();
 	void Render();
-	void setStackAlloc(StackAllocator* stack);
+	//void setStackAlloc(StackAllocator* stack);
 private:
 
 	HANDLE hConsole;

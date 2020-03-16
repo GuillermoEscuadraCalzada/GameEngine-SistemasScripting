@@ -42,9 +42,9 @@ void ScreenManager::Init()
 {
 	try
 	{
-		void* buff = stackAllocator->alloc(sizeof(GameScreen*));
+		void* buff = StackAllocator::getPTR()->alloc(sizeof(GameScreen*));
 		gameScreen = new (buff)  GameScreen();	  //Se crea un objeto de la clase GameScreen
-		gameScreen->setStackAllocator(stackAllocator);
+		//gameScreen->setStackAllocator(stackAllocator);
 		switch(currentScreen)
 		{
 		case play: {
@@ -91,16 +91,16 @@ void ScreenManager::Render()
 	}
 }
 
-void ScreenManager::setStackAlloc(StackAllocator* stack)
-{
-	try {
-		if (!stack)
-			throw(stack);
-		
-		stackAllocator = stack;
-	}catch (StackAllocator * stk) {
-		cout << "Null stack allocator" << endl;
-	}
-}
+//void ScreenManager::setStackAlloc(StackAllocator* stack)
+//{
+//	try {
+//		if (!stack)
+//			throw(stack);
+//		
+//		stackAllocator = stack;
+//	}catch (StackAllocator * stk) {
+//		cout << "Null stack allocator" << endl;
+//	}
+//}
 
 

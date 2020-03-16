@@ -70,6 +70,12 @@
     <Filter Include="Archivos de encabezado\Game Manager\StackAllocator">
       <UniqueIdentifier>{69156051-4167-4e98-be89-85a9fb39c762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\String">
+      <UniqueIdentifier>{69a713d8-6623-482f-bff9-85f557b0d439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Lua">
+      <UniqueIdentifier>{619301a6-632a-4c79-8258-1d83e880aeff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">
@@ -122,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="..\ini.c">
       <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClCompile>
+    <ClCompile Include="String\String.cpp">
+      <Filter>Archivos de encabezado\String</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="..\ini.h">
       <Filter>Archivos de encabezado\Config Ini</Filter>
+    </ClInclude>
+    <ClInclude Include="String\String.h">
+      <Filter>Archivos de encabezado\String</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,28 +1,55 @@
 #include "StackAllocator.h"
-
+StackAllocator* StackAllocator::ptr = nullptr;
 /*Asignación de memoria para las variables*/
-StackAllocator::StackAllocator(size_t size)
+StackAllocator::StackAllocator()
 {
-	//printf("%i,%i \n", sizeof(void*), sizeof(size_t));
-	static_assert(sizeof(size_t) >= sizeof(void*), "the size of uint must be greater than or equal to the size of a pointer");
-	//maxSize = size;
-	start = malloc(size);
-	maxSize = (size_t) start + size;
-	if(start == NULL)
-	{
-		printf("Error al asignar memoria");
+	try {
+		
+		config->StartUp();
+		iniReader = new INIReader("config.ini");
+		if (iniReader->ParseError() < 0)
+		{ //Si no se puede leer nada, manda error
+			string str = "No se puede cargar archivo ini\n";
+			throw(str);
+		}
+		int third = iniReader->GetInteger("memory", "third", -1);
+		size_t size = 1024 * 1024 * third;
+		//printf("%i,%i \n", sizeof(void*), sizeof(size_t));
+		static_assert(sizeof(size_t) >= sizeof(void*), "the size of uint must be greater than or equal to the size of a pointer");
+		//maxSize = size;
+		start = malloc(size);
+		maxSize = size;
+		if(start == NULL)
+		{
+			printf("Error al asignar memoria");
+		}
+		marker = (size_t)start;
+		prev = marker;
 	}
-	marker = (size_t)start;
-	prev = marker;
+	catch (string str) {
+		
+	}
 }
 
-void* StackAllocator::alloc(size_t size)
+StackAllocator::~StackAllocator()
+{
+}
+
+StackAllocator* StackAllocator::getPTR()
+{
+	if (!ptr) {
+		ptr = new StackAllocator();
+	}
+	return ptr;
+}
+
+void* StackAllocator::alloc(size_t allocsize)
 {
 	//comprobar si la memoria pedida es igual o menor al tamano que queda en el stack
-	if(prev + size <= maxSize)
+	if(allocsize < maxSize - marker - prev )
 	{
 		prev = marker;
-		marker = marker + size;
+		marker = marker + allocsize;
 		return (void*)prev;
 	} else
 		return NULL;

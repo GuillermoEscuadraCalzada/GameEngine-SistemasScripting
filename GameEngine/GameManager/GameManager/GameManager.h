@@ -4,7 +4,7 @@
 #include "../AudioManager/AudioManager.h"
 #include "../../GameObject/GameObject.h"
 #include "../../MenuInicio/StartScreen/ScreenManager.h"
-#include "../../ConfigIni/ConfigIni.h"
+//#include "../../ConfigIni/ConfigIni.h"
 #include "../../ConfigIni/INIReader.h"
 //#include "../StackAllocator/StackAllocator.h"
 #include <ctime>

@@ -10,7 +10,7 @@ GameManager::GameManager()
 		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		quit = false;	//Quit es falso
 		timer = Timer::getPTR();
-		graphics = Graphics::returnPTR(); //Manda a llamar graphics junto con su función del apuntador
+		graphics = Graphics::returnPTR(); //Manda a llamar graphics junto con su función del apuntado
 		if(!Graphics::returnPTR())
 			throw(graphics);
 		StartUp();
@@ -21,7 +21,7 @@ GameManager::GameManager()
 		audiMGR = AudioManager::getPTR();
 		screenMGR = ScreenManager::getPTR();
 		//buff = stackAllocator->alloc(sizeof(Texture*));
-		screenMGR->setStackAlloc(stackAllocator);
+		//screenMGR->setStackAlloc(stackAllocator);
 		screenMGR->Init();
 
 	} catch(Graphics* graphics) {
@@ -81,22 +81,23 @@ void GameManager::StartUp()
 {
 	try
 	{
-		initialize->StartUp();
-		INIReader reader("config.ini"); //Se abre el archivo de nuevo
-		if(reader.ParseError() < 0)
-		{ //Si no se puede leer nada, manda error
-			string str = "No se puede cargar archivo ini\n";
-			throw(str);
-		}
+		//initialize->StartUp();
+		//INIReader reader("config.ini"); //Se abre el archivo de nuevo
+		//if(reader.ParseError() < 0)
+		//{ //Si no se puede leer nada, manda error
+		//	string str = "No se puede cargar archivo ini\n";
+		//	throw(str);
+		//}
 
-		graphics->setWidth(reader.GetInteger("window", "width", -1)); //Se setea la anchura de la ventana
-		graphics->setHeight(reader.GetInteger("window", "height", -1)); //Se setea la altura de la ventana
-		thirdMemory = reader.GetInteger("memory", "third", -1);
+		//thirdMemory = reader.GetInteger("memory", "third", -1);
 
 		/*Inicialización del stack allocator*/
 		clock_t t = clock();
+		stackAllocator = StackAllocator::getPTR();
+		graphics->setWidth(stackAllocator->getPTR()->iniReader->GetInteger("window", "width", -1)); //Se setea la anchura de la ventana
+		graphics->setHeight(stackAllocator->getPTR()->iniReader->GetInteger("window", "height", -1)); //Se setea la altura de la ventana
 
-		stackAllocator = new StackAllocator(1024 * 1024 * thirdMemory);
+		//stackAllocator = new StackAllocator(1024 * 1024 * thirdMemory);
 		clock_t dt = clock() - t;
 		SetConsoleTextAttribute(hConsole, 2);
 		printf("Tomo %f segundos inicializar StackAllocator.\n", ((float)dt) / CLOCKS_PER_SEC);
