@@ -39,7 +39,6 @@ struct Vector2
 	};
 
 
-	Vector2 normalizeVector(Vector2 target, Vector2 objectVector);
 };
 
 /*Operador que te permite sumar y actualizar el valor de 'x' y 'y'

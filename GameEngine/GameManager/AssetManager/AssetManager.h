@@ -19,11 +19,7 @@ public:
 	Mix_Music* GetMusic(string fileName);
 	Mix_Chunk* GetSFX(string fileName);
 
-
-	//Vector<string> GetVector()
-	//{
-	//	return textures;
-	//}
+	string texture;
 	string text;
 	AssetList<SDL_Texture*> GetTextureVector()
 	{

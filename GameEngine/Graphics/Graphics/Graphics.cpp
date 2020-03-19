@@ -24,10 +24,6 @@ void Graphics::Release()
 	initialize = false;	//El booleando hazlo falso
 }
 
-
-
-
-
 /*Constructor de la clase graphics*/
 Graphics::Graphics()
 {
@@ -57,32 +53,29 @@ bool Graphics::Init()
 		//Mensaje que muestra si no se inicializa la ventana
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		{
-			printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-			return false;
+			throw("SDL could not initialize! SDL Error: %s",SDL_GetError());
+		
 		} else   //Si logra inicializar, sucederá esto
 		{
-	
 			if(!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 			{
-				printf("Warning: Linear texture filtering not enabled!");
+				throw("Warning: Linear texture filtering not enabled!");
 			}
 	
 			//Se crea la ventana de juego con las variables de ancho y altura
 			mainWindow = SDL_CreateWindow("GameWindow", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	
 			//Si no logra crearse, presentará el siguiente mensaje
-			if(mainWindow == NULL)
+			if(!mainWindow)
 			{
-				printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-				return false;
+				throw("Window could not be created! SDL Error: %s\n", SDL_GetError());
 			} else
 			{	//Pero si logra crearse, empezaré con el ciclo de render de la ventana
 	
 				renderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
 				if(renderer == NULL)
 				{
-					printf("Renderer Creation Error: %s\n", SDL_GetError());
-					return false;
+					throw("Renderer Creation Error: %s\n", SDL_GetError());
 				}
 	
 				SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
@@ -91,22 +84,26 @@ bool Graphics::Init()
 				//If que pregunta si se logró cargar el programa de SDL_Image
 				if(!(IMG_Init(flags) & flags))
 				{
-					throw(IMG_GetError());
-					printf("IMG initialization ERROR: %s\n", IMG_GetError());
-					return false;
+					throw("IMG initialization ERROR: %s\n", IMG_GetError());
 				}
 	
 				
 				if(TTF_Init() == -1)
 				{
-					printf("TTF ERROR: %s\n", TTF_GetError());
+					throw("TTF ERROR: %s\n", TTF_GetError());
 				}
 	
 				surface = SDL_GetWindowSurface(mainWindow);
 			}	
 			return true;	//Regresa verdadero
 		}
-	}catch(...) {
+	}
+	catch (string str) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << str << endl;
+		return false;
+	}
+	catch(...) {
 
 	}
 }
@@ -155,6 +152,34 @@ void Graphics::setHeight(int height)
 	{
 		cout << "EXCEPTION CAUGHT:" << e.what() << endl;
 	}
+}
+
+SDL_Renderer* Graphics::getRenderer()
+{
+	try {
+		if (renderer)
+			return renderer;
+		else {
+			throw(0);
+		}
+	}
+	catch (int x) {
+		cout << "There is no available Renderer!\n";
+	}
+}
+
+SDL_Surface* Graphics::GetSurface()
+{
+	try {
+		if (surface)
+			return surface;
+		else
+			throw(0);
+	}
+	catch (int x) {
+		cout << "There is no surface available!\n";
+	}
+	
 }
 
 
@@ -226,7 +251,7 @@ SDL_Texture* Graphics::CreateTextTexture(TTF_Font* font, std::string text, std::
 }
 
 /*Se limpia el buffer actual*/
-void Graphics::ClearBackBuffer()
+void Graphics::RenderClear()
 {
 	SDL_RenderClear(renderer);
 }
@@ -240,5 +265,7 @@ void Graphics::DrawTexture(SDL_Texture* texture,SDL_Rect *clipp, SDL_Rect* rect)
 /*Manda a llamar la función render al momento de crear una nueva ventana*/
 void Graphics::Render()
 {
+	SDL_SetRenderDrawColor(Graphics::returnPTR()->getRenderer(), 0x00, 0x00, 0x00, 0xff);
 	SDL_RenderPresent(renderer); //Actualiza el buffer de la ventana
+
 }

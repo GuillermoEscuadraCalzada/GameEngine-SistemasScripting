@@ -76,6 +76,24 @@
     <Filter Include="Archivos de encabezado\Lua">
       <UniqueIdentifier>{619301a6-632a-4c79-8258-1d83e880aeff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\GameObject\GameObject\Primitives">
+      <UniqueIdentifier>{fe58e695-78ed-4b21-b750-53d64d588094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\GameObject\GameObject\GO">
+      <UniqueIdentifier>{2c6c82a6-b1e2-49fe-9494-ed2b326033a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\GameObject\GameObject\Primitives\Circle">
+      <UniqueIdentifier>{4e34c3ec-7803-43ed-8284-e1f18bf6dd15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\GameObject\GameObject\Primitives\Cuadrilatero">
+      <UniqueIdentifier>{ebfd86f9-bdfd-42c3-8bf2-b02677b0bbf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Lua\Texts">
+      <UniqueIdentifier>{5e30cacd-ef4a-4fdd-be0e-4d0c53e6ba02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Console">
+      <UniqueIdentifier>{de8436b0-777d-4869-af0c-357ba5e2fc08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp">
@@ -89,12 +107,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\AnimatedTextures\AnimatedTexture.cpp">
       <Filter>Archivos de encabezado\Graphics\Animated Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject\GameObject.cpp">
-      <Filter>Archivos de encabezado\GameObject\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject\Vector2.cpp">
-      <Filter>Archivos de encabezado\GameObject\Vector2</Filter>
     </ClCompile>
     <ClCompile Include="MenuInicio\StartScreen\ScreenManager.cpp">
       <Filter>Archivos de encabezado\Screens\ScreenManager</Filter>
@@ -132,6 +144,24 @@
     <ClCompile Include="String\String.cpp">
       <Filter>Archivos de encabezado\String</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject\GameObject.cpp">
+      <Filter>Archivos de encabezado\GameObject\GameObject\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Primitives\Circle.cpp">
+      <Filter>Archivos de encabezado\GameObject\GameObject\Primitives\Circle</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Primitives\Square.cpp">
+      <Filter>Archivos de encabezado\GameObject\GameObject\Primitives\Cuadrilatero</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\Lua.cpp">
+      <Filter>Archivos de encabezado\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Console\Console.cpp">
+      <Filter>Archivos de encabezado\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Primitives\Primitives.cpp">
+      <Filter>Archivos de encabezado\GameObject\GameObject\Primitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Graphics\Graphics.h">
@@ -142,9 +172,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\AnimatedTextures\AnimatedTexture.h">
       <Filter>Archivos de encabezado\Graphics\Animated Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\GameObject.h">
-      <Filter>Archivos de encabezado\GameObject\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\Vector2.h">
       <Filter>Archivos de encabezado\GameObject\Vector2</Filter>
@@ -194,5 +221,28 @@
     <ClInclude Include="String\String.h">
       <Filter>Archivos de encabezado\String</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject\GameObject.h">
+      <Filter>Archivos de encabezado\GameObject\GameObject\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Primitives\Primitives.h">
+      <Filter>Archivos de encabezado\GameObject\GameObject\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Primitives\Circle.h">
+      <Filter>Archivos de encabezado\GameObject\GameObject\Primitives\Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Primitives\Square.h">
+      <Filter>Archivos de encabezado\GameObject\GameObject\Primitives\Cuadrilatero</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua.h">
+      <Filter>Archivos de encabezado\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Console\Console.h">
+      <Filter>Archivos de encabezado\Console</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Prueba.lua">
+      <Filter>Archivos de encabezado\Lua\Texts</Filter>
+    </None>
   </ItemGroup>
 </Project>

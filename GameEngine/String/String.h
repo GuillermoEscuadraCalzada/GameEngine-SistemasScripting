@@ -16,14 +16,14 @@ public:
 	void operator+=(const string& s);
 	
 	String operator+(const string& s);
-	String operator+(String s);
+	String operator+(String& s);
 	String operator+(const wstring& s);
 	String operator+(const char* s);
 
 	std::wstring convert(const string& toConvert);
 	String();
-	String(const string& str);
-	String(const wstring& wstr);
+	String(string str);
+	String(wstring& wstr);
 	String(const char* c);
 	~String();
 	wstring GetWString();

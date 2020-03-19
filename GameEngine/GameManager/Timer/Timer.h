@@ -13,7 +13,6 @@ private:
 	~Timer();
 public:
 	static Timer* getPTR();
-	static Timer* getPTR(void *);
 	static void Release();
 	void Reset();
 	float DeltaTime();

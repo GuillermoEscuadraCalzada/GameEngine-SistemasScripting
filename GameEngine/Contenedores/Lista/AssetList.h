@@ -59,38 +59,6 @@ private:
 	int current;
 };
 
-//template<class T>
-//inline Vector<T>::Vector()
-//{
-//	try
-//	{
-//		
-//
-//	} catch(exception & e)
-//	{
-//		cout << "Exception caught: " << e.what() << endl;
-//	} catch(...)
-//	{
-//
-//	}
-//}
-//
-//template<class T>
-//inline Vector<T>::~Vector()
-//{
-//	try
-//	{
-//		first = last = nullptr;
-//
-//	} catch(exception & e)
-//	{
-//		cout << "Exception caught: " << e.what() << endl;
-//	}catch(...)
-//	{
-//
-//	}
-//}
-
 /*Constructor por defecto de la clase Vectors*/
 template<class T>
 inline AssetList<T>::AssetList()
@@ -239,12 +207,7 @@ void AssetList<T>::freeMemory()
 				SDL_Texture* text = iterador->val;//Guarda una variable texture
 				SDL_DestroyTexture(text);
 				iterador = nullptr;
-			}/* else if(std::is_same_v<T, TTF_Font*>)
-			{
-				TTF_Font* thisFont = iterador->val;
-				TTF_CloseFont(thisFont);
-				iterador = nullptr;
-			}*/
+			}
 			iterador = iterador->next;
 		}
 	} catch(const std::exception& e)

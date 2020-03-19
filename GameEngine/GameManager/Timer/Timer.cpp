@@ -23,13 +23,6 @@ Timer* Timer::getPTR()
 	return ptr;	//Regresa el apuntador
 }
 
-Timer* Timer::getPTR(void* buff) {
-	//Pregunta si el apuntador es nulo
-	if(ptr == nullptr)
-		ptr = new Timer();	//Crea el apuntador
-	return ptr;	//Regresa el apuntador
-}
-
 /*Releas elimina el apuntador y lo hace nulo*/
 void Timer::Release()
 {

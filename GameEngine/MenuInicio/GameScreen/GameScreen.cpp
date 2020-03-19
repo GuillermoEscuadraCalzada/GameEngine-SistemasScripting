@@ -79,8 +79,7 @@ void GameScreen::Update()
 		cout << "Exception caught: " << e.what() << std::endl;
 	}
 }
-	
-/*Función que renderiza cada elemento importante de esta ventana, los nodos del grafo, el fondo, el score y */
+
 void GameScreen::Render()
 {
 	try

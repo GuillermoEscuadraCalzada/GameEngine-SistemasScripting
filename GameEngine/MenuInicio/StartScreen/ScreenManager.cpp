@@ -1,6 +1,6 @@
 #include "ScreenManager.h"
 
-ScreenManager* ScreenManager::instance = nullptr;
+ScreenManager* ScreenManager::ptr = nullptr;
 
 /*Constructor por defecto de la clase ScreenManager*/
 ScreenManager::ScreenManager()
@@ -26,16 +26,16 @@ ScreenManager::~ScreenManager()
 ScreenManager* ScreenManager::getPTR()
 {
 	//Si es nulo, crea un nuevo objeto de esta clase
-	if(instance == nullptr)	
-		instance = new ScreenManager();
-	return instance;	//Regrea el apuntador
+	if(ptr == nullptr)	
+		ptr = new ScreenManager();
+	return ptr;	//Regrea el apuntador
 }
 
 /*Elimina el apuntador y lo hace nulo*/
 void ScreenManager::Release()
 {
-	delete instance;
-	instance = nullptr;
+	delete ptr;
+	ptr = nullptr;
 }
 
 void ScreenManager::Init()

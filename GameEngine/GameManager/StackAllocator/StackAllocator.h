@@ -6,7 +6,6 @@ class StackAllocator
 
 public:
 	static StackAllocator* getPTR();
-	//static StackAllocator* getPTR();
 	typedef size_t Marker;
 	void* alloc(size_t allocsize);
 	Marker getMarker();
@@ -15,7 +14,6 @@ public:
 	INIReader* iniReader;
 private:
 	static StackAllocator* ptr;
-	StackAllocator(size_t size);
 	StackAllocator();
 	~StackAllocator();
 	//tamano del buffer total

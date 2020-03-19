@@ -2,7 +2,7 @@
 #define GAMEOBJECT_H
 
 #include "Vector2.h"
-
+#include "../Graphics/Graphics/Graphics.h"
 class GameObject
 {
 public:
@@ -10,38 +10,20 @@ public:
 	GameObject(float x = 0, float y = 0);
 	GameObject(Vector2 pos);
 	~GameObject();
-
+	 
 	void Position(Vector2 position);
+	
 	Vector2 Position(SPACE space = world);
-	Vector2 GetPosition() {
-		return Pos;
-	};
-	Vector2 addFloat(float x, float y)
-	{
-		Pos.x += x;
-		Pos.y += y;
-		return Pos;
-	}
-	void setPosition(Vector2 pos)
-	{
-		Pos = pos;
-	}
-	void setActive(bool active);
-	bool returnActive();
+	Vector2 GetPosition();
+	Vector2 addFloat(float x, float y);
+	
+	void setPosition(Vector2 pos);
 	void Translate(Vector2 vec);
 
-
-	void MoveObject();
-
-	float length(Vector2 thisVec)
-	{
-		return sqrt(thisVec.x * thisVec.x + thisVec.y * thisVec.y);
-	}
-	void setAngle(Vector2 vector, float angle);
+	float length(Vector2 thisVec);
 
 private:
 	Vector2 Pos;
-	bool active;
 
 	virtual void Update();
 	virtual void Render();

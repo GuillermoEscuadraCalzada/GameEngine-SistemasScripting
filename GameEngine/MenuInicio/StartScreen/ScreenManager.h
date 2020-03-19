@@ -9,10 +9,11 @@ class ScreenManager
 	enum SCREENS {start, play};
 	InputManager* input;
 	SCREENS currentScreen;
-	static ScreenManager* instance;
+	static ScreenManager* ptr;
 	//StackAllocator* stackAllocator;
 
 public:
+
 	GameScreen* gameScreen;
 	static ScreenManager* getPTR();
 	static void Release();

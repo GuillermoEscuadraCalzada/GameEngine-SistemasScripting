@@ -53,9 +53,9 @@ String String::operator+(const string& s)
 }
 
 /*Sumarle al wstring el wstring de otro objeto String*/
-String String::operator+(String s)
+String String::operator+(String& s)
 {
-    return String(wString + s.GetWString());
+    return String(wString += s.GetWString());
 }
 
 
@@ -97,13 +97,13 @@ String::String()
     wString = L"";
 }
 
-String::String(const string& str)
+String::String(string str)
 {
     _setmode(_fileno(stdout), _O_U8TEXT);
     wString = convert(str);
 }
 
-String::String(const std::wstring& wstr)
+String::String(std::wstring& wstr)
 {
     _setmode(_fileno(stdout), _O_U8TEXT);
     wString = wstr;
@@ -127,3 +127,4 @@ void String::setWString(const wstring& string)
 {
     wString = string;
 }
+

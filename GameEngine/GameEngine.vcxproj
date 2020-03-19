@@ -156,6 +156,7 @@
     <ClCompile Include="..\ini.c" />
     <ClCompile Include="ConfigIni\ConfigIni.cpp" />
     <ClCompile Include="ConfigIni\INIReader.cpp" />
+    <ClCompile Include="Console\Console.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameManager\AssetManager\AssetManager.cpp" />
     <ClCompile Include="GameManager\AudioManager\AudioManager.cpp" />
@@ -164,10 +165,13 @@
     <ClCompile Include="GameManager\StackAllocator\StackAllocator.cpp" />
     <ClCompile Include="GameManager\Timer\Timer.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
-    <ClCompile Include="GameObject\Vector2.cpp" />
+    <ClCompile Include="GameObject\Primitives\Circle.cpp" />
+    <ClCompile Include="GameObject\Primitives\Primitives.cpp" />
+    <ClCompile Include="GameObject\Primitives\Square.cpp" />
     <ClCompile Include="Graphics\AnimatedTextures\AnimatedTexture.cpp" />
     <ClCompile Include="Graphics\Graphics\Graphics.cpp" />
     <ClCompile Include="Graphics\Texture\Texture.cpp" />
+    <ClCompile Include="Lua\Lua.cpp" />
     <ClCompile Include="MenuInicio\GameScreen\GameScreen.cpp" />
     <ClCompile Include="MenuInicio\StartScreen\ScreenManager.cpp" />
     <ClCompile Include="String\String.cpp" />
@@ -176,6 +180,7 @@
     <ClInclude Include="..\ini.h" />
     <ClInclude Include="ConfigIni\ConfigIni.h" />
     <ClInclude Include="ConfigIni\INIReader.h" />
+    <ClInclude Include="Console\Console.h" />
     <ClInclude Include="Contenedores\Lista\AssetList.h" />
     <ClInclude Include="Contenedores\Nodo\Nodo.h" />
     <ClInclude Include="GameManager\AssetManager\AssetManager.h" />
@@ -185,14 +190,21 @@
     <ClInclude Include="GameManager\StackAllocator\StackAllocator.h" />
     <ClInclude Include="GameManager\Timer\Timer.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="GameObject\Primitives\Circle.h" />
+    <ClInclude Include="GameObject\Primitives\Primitives.h" />
+    <ClInclude Include="GameObject\Primitives\Square.h" />
     <ClInclude Include="GameObject\Vector2.h" />
     <ClInclude Include="Graphics\AnimatedTextures\AnimatedTexture.h" />
     <ClInclude Include="Graphics\Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Texture\Texture.h" />
+    <ClInclude Include="Lua.h" />
     <ClInclude Include="MenuInicio\GameScreen\GameScreen.h" />
     <ClInclude Include="MenuInicio\StartScreen\ScreenManager.h" />
     <ClInclude Include="myVector.h" />
     <ClInclude Include="String\String.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Prueba.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

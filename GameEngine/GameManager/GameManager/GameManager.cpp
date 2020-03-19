@@ -1,42 +1,19 @@
 #include "GameManager.h"
 GameManager* GameManager::ptr = nullptr;
 
-
 /*Constructor principal de GameManager*/
 GameManager::GameManager()
 {
 	try {
-
+		lua = new Lua();
 		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		quit = false;	//Quit es falso
-		timer = Timer::getPTR();
-		graphics = Graphics::returnPTR(); //Manda a llamar graphics junto con su función del apuntado
-		if(!Graphics::returnPTR())
-			throw(graphics);
-		StartUp();
-		graphics->Init();
-		//Si es falso, termina el update del juego
-		assetM = AssetManager::getPTR();
-		inputMGR = InputManager::getPtr();
-		audiMGR = AudioManager::getPTR();
-		screenMGR = ScreenManager::getPTR();
-		//buff = stackAllocator->alloc(sizeof(Texture*));
-		//screenMGR->setStackAlloc(stackAllocator);
-		screenMGR->Init();
-
-	} catch(Graphics* graphics) {
-		SetConsoleTextAttribute(hConsole, 4);
-		cout << "GRAPHICS DIDN'T OPEN" << endl;
-	} catch(exception & e) {
+		GetSingletons();
+		square = new Square(graphics->SCREEN_WIDTH / 2, graphics->SCREEN_HEIGHT / 2, 50, 50);
+	}  catch (exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);
 		cout << "EXCEPTION CAUGHT: " << e.what() << endl;
 	}
-
-	//screenMGR->gameScreen->setBackGround( new /*(buff)*/ Texture("Fondo_800x800.png", 0, 0, 800, 800));
-	//screenMGR->gameScreen->GetBackGround()->setPosition(Vector2(400, 400));
-
-	//screenMGR->gameScreen->setCharacter(new /*(buff)*/ Texture("HollowKnight.png", 0, 0, 179, 185));
-	//screenMGR->gameScreen->GetCharacter()->setPosition(Vector2(400, 400));
 }
 
 /*Destructor principal del juego, se cierran todas las clases que sean singleton y se eliminan apuntadores*/
@@ -45,15 +22,13 @@ GameManager::~GameManager()
 	//Manda a llamar la función release del juego
 	Graphics::Release();
 	graphics = nullptr;	//Haz nulo este apuntador
-	
-	delete backGround;
-	backGround = nullptr;
+
 
 	AssetManager::Close();
 	assetM = nullptr;
 
 	AudioManager::Release();
-	audiMGR = nullptr;
+	audioMGR = nullptr;
 
 	InputManager::Release();
 	inputMGR = nullptr;
@@ -63,6 +38,8 @@ GameManager::~GameManager()
 
 	ScreenManager::Release();
 	screenMGR = nullptr;
+
+	console = nullptr;
 
 }
 
@@ -81,16 +58,7 @@ void GameManager::StartUp()
 {
 	try
 	{
-		//initialize->StartUp();
-		//INIReader reader("config.ini"); //Se abre el archivo de nuevo
-		//if(reader.ParseError() < 0)
-		//{ //Si no se puede leer nada, manda error
-		//	string str = "No se puede cargar archivo ini\n";
-		//	throw(str);
-		//}
-
-		//thirdMemory = reader.GetInteger("memory", "third", -1);
-
+		lua->LoadFile("Prueba.lua");
 		/*Inicialización del stack allocator*/
 		clock_t t = clock();
 		stackAllocator = StackAllocator::getPTR();
@@ -106,13 +74,6 @@ void GameManager::StartUp()
 		t = clock() - t;
 		printf("Tomo %f segundos asignar con memoria dinamica.\n", ((float)t) / CLOCKS_PER_SEC);
 		SDL_ShowCursor(0); //Se oculta el cursor
-	} catch(string s)
-	{
-		SetConsoleTextAttribute(hConsole, 4);
-		//system("color 2");
-		cout << s;
-		exit(0);
-
 	}
 	catch(const std::exception& e)
 	{
@@ -141,8 +102,6 @@ void GameManager::LateUpdate()
  /*El update principal del juego*/
 void GameManager::MainUpdate()
 {
-
-	/*audiMGR->PlayMusic("funkorama.mp3");*/
 	while(!quit /*&& menuInicio->continuee*/)
 	{
 		timer->Update();
@@ -152,6 +111,10 @@ void GameManager::MainUpdate()
 		{
 			if(eventHandler.type == SDL_QUIT)	//Si se termina el programa, termina el loop
 				quit = true;
+			if (inputMGR->getPtr()->keyDown(SDL_SCANCODE_ESCAPE) ){
+				quit = true;
+			}
+
 		}
 
 		if(timer->DeltaTime() >= 1.0f / FrameRate)
@@ -162,6 +125,7 @@ void GameManager::MainUpdate()
 			Render();
 		}
 	}
+	console->SaveConsole();
 }
 
 
@@ -169,25 +133,83 @@ void GameManager::MainUpdate()
 void GameManager::Render()
 {
 
-	graphics->ClearBackBuffer();
-
+	graphics->RenderClear();
 	screenMGR->Render();
-
 	graphics->Render();	//Actualiza constantemente el render del juego
 
 }
 
-int GameManager::GetWidth() {
-	return graphics->SCREEN_WIDTH;
+void GameManager::GetSingletons()
+{
+	try {
+		timer = Timer::getPTR();
+		if (!timer) throw(timer);
+		graphics = Graphics::returnPTR(); //Manda a llamar graphics junto con su función del apuntado
+		if (!graphics) throw(graphics);
+		StartUp();
+		graphics->Init();
+
+		assetM = AssetManager::getPTR();
+		if (!assetM) throw(assetM);
+
+
+		inputMGR = InputManager::getPtr();
+		if (!inputMGR) throw(inputMGR);
+		audioMGR = AudioManager::getPTR();
+
+		if (!audioMGR) throw(audioMGR);
+		screenMGR = ScreenManager::getPTR();
+
+		if (!screenMGR) throw(screenMGR);
+		screenMGR->Init();
+
+		console = Console::GetPTR();
+		if (!console) throw(console);
+		
+	}
+	catch (Timer * timer) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: TIMER DIDN'T OPEN" << endl;
+		exit(0);
+	}
+	catch (Graphics * graphics) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: GRAPHICS DIDN'T OPEN" << endl;
+		exit(0);
+	}
+	catch (AssetManager * assetM) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: ASSET MANAGER DIDN'T OPEN" << endl;
+		exit(0);
+	}
+	catch (InputManager * inputMGR) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: INPUT MANAGER DIDN'T OPEN" << endl;
+		exit(0);
+	}
+	catch (AudioManager * audioMGR) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: AUDIO MANAGER DIDN'T OPEN" << endl;
+		exit(0);
+	}
+	catch (ScreenManager * screenMGR) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: SCREEN MANAGER DIDN'T OPEN" << endl;
+		exit(0);
+	}
+	catch (Console * console) {
+		SetConsoleTextAttribute(hConsole, 4);
+		cout << "WARNING: CONSOLE DIDN'T OPEN" << endl;
+		exit(0);
+	}
 }
 
-int GameManager::GetHeight() {
-	return graphics->SCREEN_HEIGHT;
-}
+
 
 //Función que cierra esta clase y elimina todos los elementos del juego
 void GameManager::Close()
 {
 	delete ptr;	//Borra el apuntador
 	ptr = nullptr;	//Hazlo nulo
+	
 }

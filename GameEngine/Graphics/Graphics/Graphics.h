@@ -6,7 +6,7 @@
 #include <iostream>
 #include <SDL_image.h>
 #include "../../Contenedores/Lista/AssetList.h"
-
+#include <Windows.h>
 class Graphics
 {
 public:
@@ -20,22 +20,18 @@ public:
 	SDL_Texture* CreateTextTexture(TTF_Font* font, std::string text, std::string key, 
 								   AssetList<SDL_Texture*>& textVector, AssetList<TTF_Font*>& fontVector, SDL_Color color);
 	
-	void ClearBackBuffer();
+	void RenderClear();
 	void DrawTexture(SDL_Texture* texture, SDL_Rect* clipp,  SDL_Rect* rect);
 
 	void Render();
 	bool Init();
 	void setWidth(int width);
 	void setHeight(int height);
-	SDL_Renderer* getRender()
-	{
-		return renderer;
-	}
-
-
-
+	SDL_Renderer* getRenderer();
+	SDL_Surface* GetSurface();
 private:
 	static Graphics* ptr;
+	HANDLE hConsole;
 	static bool initialize;
 
 	SDL_Window* mainWindow;
