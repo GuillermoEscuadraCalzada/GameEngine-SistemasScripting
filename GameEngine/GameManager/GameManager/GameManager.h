@@ -2,9 +2,8 @@
 #define GAMEMANAGER_H
 #include "../AudioManager/AudioManager.h"
 #include "../../String/String.h"
-#include "../../Lua.h"
-#include "../../GameObject/Primitives/Circle.h"
-#include "../../GameObject/Primitives/Square.h"
+#include "../../Lua/Lua.h"
+
 #include "../../MenuInicio/StartScreen/ScreenManager.h"
 #include "../../Console/Console.h"
 #include <ctime>
@@ -16,7 +15,6 @@ public:
 	void StartUp();
 	static void Close();
 	StackAllocator* stackAllocator;
-	Square* square;
 #pragma region Updates
 	void MainUpdate();
 #pragma endregion
@@ -50,7 +48,6 @@ protected:
 	ScreenManager* screenMGR;
 	SDL_Event eventHandler;
 	bool quit;
-
 	void GetSingletons();
 };
 

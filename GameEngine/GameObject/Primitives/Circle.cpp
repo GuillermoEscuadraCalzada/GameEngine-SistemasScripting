@@ -24,7 +24,8 @@ inline void Circle::Render()
 /*Se genera un círculo*/
 void Circle::GenerateCircle()
 {
-	try {
+	try {	
+
 		if (radius > 0) {
 			const int diameter = radius * 2;
 			int x = radius -1;

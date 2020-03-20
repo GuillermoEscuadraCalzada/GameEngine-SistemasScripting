@@ -5,6 +5,7 @@ GameScreen::GameScreen() {
 	input = InputManager::getPtr();	//Busca el apuntador del input
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	textureList = new myVector<Texture*>();
+	primitivesList = new AssetList<Primitives*>();
 }
 
 GameScreen::~GameScreen()
@@ -50,20 +51,10 @@ Texture* GameScreen::GetCharacter() {
 		cout << "Este objeto es nulo.\n";
 	}
 }
-
-/*Se establece el stack allocator como uno ya existente para así no chocar entre todos los que ya existen
- *@param[StackAllocator* stackAlloc] el stack que se le pondrá al stack de esta clase*/
-//void GameScreen::setStackAllocator(StackAllocator* stackAlloc)
+//
+//int GameScreen::MoveObject(lua_State* lua)
 //{
-//	try {
-//		//Si el stack del parámetro es nulo, lanza un error
-//		if (!stackAlloc)
-//			throw(stackAlloc);
-//		stackAllocator = stackAlloc; //Igualalos
-//	}
-//	catch (StackAllocator * alloc) {
-//		cout << "Null stack allocator" << endl;
-//	}
+//	return 0;
 //}
 
 /*Actualización de la pantalla gameScreen, donde suceden todas las acciones del jugador, disminución del tiempo, etc.*/
@@ -72,6 +63,15 @@ void GameScreen::Update()
 	try
 	{
 		input->Update();
+		//if (input->keyPressed(SDL_SCANCODE_SPACE)) {
+		//	Square* sq = new Square();
+		//	sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
+		//	string name;
+		//	cout << "Escribe el nombre de tu objeto\n";
+		//	cin >> name;
+		//	primitivesList->push_back(name, sq);
+		//}
+
 		input->UpdatePrevInput();
 
 	} catch(std::exception & e){
@@ -84,10 +84,17 @@ void GameScreen::Render()
 {
 	try
 	{
-		if(backGround)	
-			backGround->Render(); ///Renderiza el fondo
-		if(character)
-			character->Render(); //Renderiza el personaje
+		if (primitivesList->getSize() > 0) {
+			AssetNode<Primitives*>* it = primitivesList->first;
+			while (it != primitivesList->last->next) {
+				it->val->Render();
+				it = it->next;
+			}
+		}
+		//if(backGround)	
+		//	backGround->Render(); ///Renderiza el fondo
+		//if(character)
+		//	character->Render(); //Renderiza el personaje
 	} catch(exception & e)
 	{
 		SetConsoleTextAttribute(hConsole, 4);
@@ -99,11 +106,11 @@ void GameScreen::Render()
  *@param[void * buff] el buffer que permitirá la entrada de todos los elementos*/
 void GameScreen::Init() {
 	try {
-		
-		setBackGround(new  Texture("Fondo_800x800.png", 0, 0, 800, 800));/*setBackGround(new (buff) Texture("Fondo_800x800.png", 0, 0, 800, 800));*/ //Selecciona una textura para el fondo
-		GetBackGround()->setPosition(Vector2(400, 400)); //Establece su posición
-		setCharacter(new  Texture("HollowKnight.png", 0, 0, 179, 185));//setCharacter(new (buff) Texture("HollowKnight.png", 0, 0, 179, 185)); //Establece una nueva imagen para el personaje
-		GetCharacter()->setPosition(Vector2(400, 400)); //Establece su posición
+	
+		//setBackGround(new  Texture("Fondo_800x800.png", 0, 0, 800, 800));/*setBackGround(new (buff) Texture("Fondo_800x800.png", 0, 0, 800, 800));*/ //Selecciona una textura para el fondo
+		//GetBackGround()->setPosition(Vector2(400, 400)); //Establece su posición
+		//setCharacter(new  Texture("HollowKnight.png", 0, 0, 179, 185));//setCharacter(new (buff) Texture("HollowKnight.png", 0, 0, 179, 185)); //Establece una nueva imagen para el personaje
+		//GetCharacter()->setPosition(Vector2(400, 400)); //Establece su posición
 	} catch(exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);
 		cout << "EXCEPTION CAUGHT: " << e.what() << endl;

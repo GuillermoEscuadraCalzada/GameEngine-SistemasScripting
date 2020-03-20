@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 #include "../../Contenedores/Lista/AssetList.h"
 #include <Windows.h>
+#include "../../Lua/Lua.h"
 class Graphics
 {
 public:
@@ -30,13 +31,13 @@ public:
 	SDL_Renderer* getRenderer();
 	SDL_Surface* GetSurface();
 private:
+	SDL_Window* mainWindow;
+	SDL_Surface* surface;
+	SDL_Renderer* renderer;
 	static Graphics* ptr;
 	HANDLE hConsole;
 	static bool initialize;
 
-	SDL_Window* mainWindow;
-	SDL_Surface* surface;
-	SDL_Renderer* renderer;
 
 	Graphics();
 	~Graphics();

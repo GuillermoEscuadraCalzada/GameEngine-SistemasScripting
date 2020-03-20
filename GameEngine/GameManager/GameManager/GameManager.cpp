@@ -5,11 +5,12 @@ GameManager* GameManager::ptr = nullptr;
 GameManager::GameManager()
 {
 	try {
-		lua = new Lua();
+		lua = Lua::GetPTR();
+		//lua->Test("Prueba.lua");
+		//lua->TestCallFunctionFromCPP("Prueba.lua");
 		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		quit = false;	//Quit es falso
 		GetSingletons();
-		square = new Square(graphics->SCREEN_WIDTH / 2, graphics->SCREEN_HEIGHT / 2, 50, 50);
 	}  catch (exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);
 		cout << "EXCEPTION CAUGHT: " << e.what() << endl;
@@ -20,6 +21,7 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
 	//Manda a llamar la función release del juego
+	
 	Graphics::Release();
 	graphics = nullptr;	//Haz nulo este apuntador
 
@@ -58,7 +60,6 @@ void GameManager::StartUp()
 {
 	try
 	{
-		lua->LoadFile("Prueba.lua");
 		/*Inicialización del stack allocator*/
 		clock_t t = clock();
 		stackAllocator = StackAllocator::getPTR();
@@ -102,21 +103,30 @@ void GameManager::LateUpdate()
  /*El update principal del juego*/
 void GameManager::MainUpdate()
 {
-	while(!quit /*&& menuInicio->continuee*/)
+	while(!quit)
 	{
 		timer->Update();
 
+		try {
 		//Manda a llamar el sistema de eventos de SDL
-		while(SDL_PollEvent(&eventHandler) != 0)
-		{
-			if(eventHandler.type == SDL_QUIT)	//Si se termina el programa, termina el loop
-				quit = true;
-			if (inputMGR->getPtr()->keyDown(SDL_SCANCODE_ESCAPE) ){
-				quit = true;
+			while (!SDL_PollEvent(&eventHandler))
+			{
+
+				if (eventHandler.type == SDL_QUIT)	//Si se termina el programa, termina el loop
+				{
+					quit = true;
+					break;
+				}
+				if (inputMGR->getPtr()->keyDown(SDL_SCANCODE_ESCAPE) ){
+					quit = true;
+					break; 
+				}
+
 			}
-
 		}
-
+		catch (exception & e) {
+			cout << e.what() << endl;
+		}
 		if(timer->DeltaTime() >= 1.0f / FrameRate)
 		{
 			EarlyUpdate();
@@ -139,6 +149,7 @@ void GameManager::Render()
 
 }
 
+/*Se obtienen todos los singletons del GameEngine*/
 void GameManager::GetSingletons()
 {
 	try {

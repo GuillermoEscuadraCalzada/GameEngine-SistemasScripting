@@ -5,19 +5,22 @@
 #include "../../GameManager/InputManager/InputManager.h"
 #include "../../GameManager/Timer/Timer.h"
 #include "../../GameObject/GameObject.h"
+#include "../../MenuInicio/Screens.h"
 #include "../../myVector.h"
 #include <Windows.h>
 
-class GameScreen : public GameObject
+class GameScreen 
 {
 public:
-	
 	void Update();
 	void Render();
 	void Init();
 	GameScreen();
 	~GameScreen();
+
 	myVector<Texture*>* textureList;
+	AssetList<Primitives*>* primitivesList;
+
 	void setBackGround(Texture* backGround);
 	void setCharacter(Texture* backGround);
 
@@ -29,7 +32,7 @@ private:
 	float score = 0;
 	bool change = true;
 	int counter = 0;
-	
+	int MoveObject(lua_State* lua);
 	//StackAllocator* stackAllocator;
 	InputManager* input;
 	int milisegundos = 0;

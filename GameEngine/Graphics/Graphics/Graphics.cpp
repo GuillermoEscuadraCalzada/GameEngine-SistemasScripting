@@ -22,6 +22,8 @@ void Graphics::Release()
 	delete ptr;	//Borra el apuntador
 	ptr = nullptr;	//Hazlo nulo
 	initialize = false;	//El booleando hazlo falso
+	
+	//Cierra todos los programas
 }
 
 /*Constructor de la clase graphics*/
@@ -33,15 +35,13 @@ Graphics::Graphics()
 /*Manda a llamar el destructor de la clase*/
 Graphics::~Graphics()
 {
-	
 	SDL_DestroyWindow(mainWindow);	//Destruye la ventana de la ventana
 	mainWindow = nullptr;	//Haz la ventana nula
 	SDL_DestroyRenderer(renderer);
 	renderer = nullptr;
-	
-	//Cierra todos los programas
 	TTF_Quit();
 	IMG_Quit();
+	
 	SDL_Quit();	//Cierra SDL
 }
 

@@ -67,7 +67,7 @@ inline AssetList<T>::AssetList()
 	{
 		first = nullptr;
 		last = nullptr;
-		this->size = 1;
+		this->size = 0;
 		this->current = 0;
 		
 	} catch(exception & e)

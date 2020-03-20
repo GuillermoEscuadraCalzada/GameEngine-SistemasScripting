@@ -233,15 +233,21 @@
     <ClInclude Include="GameObject\Primitives\Square.h">
       <Filter>Archivos de encabezado\GameObject\GameObject\Primitives\Cuadrilatero</Filter>
     </ClInclude>
-    <ClInclude Include="Lua.h">
-      <Filter>Archivos de encabezado\Lua</Filter>
-    </ClInclude>
     <ClInclude Include="Console\Console.h">
       <Filter>Archivos de encabezado\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuInicio\Screens.h">
+      <Filter>Archivos de encabezado\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Lua.h">
+      <Filter>Archivos de encabezado\Lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Prueba.lua">
+      <Filter>Archivos de encabezado\Lua\Texts</Filter>
+    </None>
+    <None Include="Lua\Prueba2.lua">
       <Filter>Archivos de encabezado\Lua\Texts</Filter>
     </None>
   </ItemGroup>

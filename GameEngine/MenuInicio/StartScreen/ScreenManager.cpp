@@ -8,6 +8,8 @@ ScreenManager::ScreenManager()
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	input = InputManager::getPtr();	  //Apuntador de la clase Input
 	currentScreen = play;		     //El enum comienza con la variable start
+	void* buff = StackAllocator::getPTR()->alloc(sizeof(GameScreen*));
+	gameScreen = new /*(buff)*/ GameScreen();
 
 }
 
@@ -38,13 +40,11 @@ void ScreenManager::Release()
 	ptr = nullptr;
 }
 
+/*Se inicializan todas las diferentes ventanas de juego*/
 void ScreenManager::Init()
 {
 	try
-	{
-		void* buff = StackAllocator::getPTR()->alloc(sizeof(GameScreen*));
-		gameScreen = new (buff)  GameScreen();	  //Se crea un objeto de la clase GameScreen
-		//gameScreen->setStackAllocator(stackAllocator);
+	{		
 		switch(currentScreen)
 		{
 		case play: {
@@ -68,8 +68,8 @@ void ScreenManager::Update()
 	switch(currentScreen)
 	{
 	case play:
-		//gameScreen->Update();	//Se llama la función update de GameScreen
-
+		gameScreen->Update();	//Se llama la función update de GameScreen
+		break;
 	default:
 		break;
 	}

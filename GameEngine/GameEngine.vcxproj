@@ -197,13 +197,15 @@
     <ClInclude Include="Graphics\AnimatedTextures\AnimatedTexture.h" />
     <ClInclude Include="Graphics\Graphics\Graphics.h" />
     <ClInclude Include="Graphics\Texture\Texture.h" />
-    <ClInclude Include="Lua.h" />
+    <ClInclude Include="Lua\Lua.h" />
     <ClInclude Include="MenuInicio\GameScreen\GameScreen.h" />
+    <ClInclude Include="MenuInicio\Screens.h" />
     <ClInclude Include="MenuInicio\StartScreen\ScreenManager.h" />
     <ClInclude Include="myVector.h" />
     <ClInclude Include="String\String.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Lua\Prueba2.lua" />
     <None Include="Prueba.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

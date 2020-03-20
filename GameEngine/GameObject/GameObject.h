@@ -3,6 +3,8 @@
 
 #include "Vector2.h"
 #include "../Graphics/Graphics/Graphics.h"
+#include <string>
+#include <iostream>
 class GameObject
 {
 public:
@@ -21,10 +23,10 @@ public:
 	void Translate(Vector2 vec);
 
 	float length(Vector2 thisVec);
+	Lua* lua = Lua::GetPTR();
 
 private:
 	Vector2 Pos;
-
 	virtual void Update();
 	virtual void Render();
 };

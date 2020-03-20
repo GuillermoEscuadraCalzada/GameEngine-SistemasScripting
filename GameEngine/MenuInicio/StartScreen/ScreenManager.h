@@ -2,7 +2,6 @@
 #define SCREENMANAGER_H
 
 #include <Windows.h>
-//#include "../../GameManager/StackAllocator/StackAllocator.h"
 #include "../GameScreen/GameScreen.h"
 class ScreenManager
 {
@@ -13,7 +12,6 @@ class ScreenManager
 	//StackAllocator* stackAllocator;
 
 public:
-
 	GameScreen* gameScreen;
 	static ScreenManager* getPTR();
 	static void Release();
