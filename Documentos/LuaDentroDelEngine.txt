@@ -1,0 +1,9 @@
+Lenguaje de Scripting a utilizar en mi Game Engine
+
+El lenguaje de Scripting que yo utilizaré para mi proyecto Final del Game Engine será Lua. Lo hemos estado viendo en la clase de Sistemas de Scripting y en mi opinión, es preferible utilizar algo que ya estamos viendo en vez de aventurarme a implementar otro lenguaje. No estaría mal intentarlo pero por cuestión de tiempo es preferible no hacerlo. 
+¿Cómo lo implementaré o cómo lo utlizarán mis usuarios? Será una implementación sencilla para no complicarme. El usuario podrá elegir qué figura primitiva desea crear, dándole libertad de crear el tamaño que se desee por medio de la cantidad de pixeles que se ingresen. Además, se podrá elegir la dirección a la que se quiera que el objeto se mueva. Por el momento sólo está planeado que se mueva de manera horizontal y vertical. 
+El usuario podrá escribir el nombre completo del objeto con el que se quiera trabajar y automáticamente se dibujaría. Se crearía un objeto nuevo y a partir de ahí, las demás acciones se realizarán como el usuario lo desee.
+
+
+EDICIÓN:
+No se pudo implementar el movimiento de sprites. Sólo el de creación de Sprites. Lua chocó con SDL y se rompe el while del juego.

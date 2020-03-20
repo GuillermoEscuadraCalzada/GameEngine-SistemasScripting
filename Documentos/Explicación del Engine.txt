@@ -1,0 +1,21 @@
+El engine es sencillo de usar. Se puede elegir el lenguaje con el cual se quiere que las palabras se impriman. Dependiendo del lenguaje (Español o Inglés), podrán aparecer
+acentos u otro tipo de símbolos.
+Para la creación de objetos primitivos (Círculo y Cuadrado) se pueden hacer de la siguiente manera:
+ 1.- Presionar el botón 1 del teclado para crear un cuadrado con las dimensiones y posición que se desee. 
+ 2.- Presionar el botón 2 del teclado para crear un círculo con el radio y color que se desee. Sólo se dibuja el contorno, no se rellena esta figura.
+ 3.- Si se ingresa el nombre de un objeto de otro que ya existe, se le añadirá un número 1 a dicho objeto. Así como en unity que con duplicados hace lo siguiente:
+	Cubo
+	Cubo (1)
+En mi Engine el caso sería el siguiente:
+	Cubo
+	Cubo1
+Se puede ingresar música, imágenes y efectos de sonido pero lamentablemente ya no hubo tiempo para que cualquier usuario pueda implementarlos de manera sencilla. Por lo que para 
+implementarlos es necesario usar código de C++
+
+Lua fue un fracaso, sirve en casos aislado pero al ser aplicados a un objeto, el loop del juego se rompe y marca un error que es imposible de solucionar porque no marca dónde es ni que error es.
+Los objetos están guardados en una lista con un string como ID y al ser ingresados o buscados pueden recuperarse por medio del string (nombre del objeto) para mayor rapidez de búsqueda.
+Gracias a que siempre se tendrá un valor distinto, nunca se tendrán nombres iguales.
+Las DLL'S y carpeta de texturas se encuentran dentro de la carpeta del juego en la parte más externa, esto es para que cualquiera que quiera modificar el código fuente, pueda hacerlo fácilmente.
+Los directorios de las librerías están escritos de manera que busquen la dirección más cercana en las carpetas y no desde cero en el disco.
+
+El sistema está basado en el Game Object Model y tiene singletons para todos los sistemas del juego.
