@@ -62,6 +62,8 @@ Square::Square(int x, int y, int width, int height)
 /*Constructor por defecto de la clase Square*/
 Square::Square()
 {
+	handler = GetStdHandle(STD_OUTPUT_HANDLE);
+	console = Console::GetPTR();
 	input = InputManager::getPtr();
 	timer = Timer::getPTR();
 	graphics = Graphics::returnPTR();
@@ -85,11 +87,18 @@ void Square::Render()
 /*Update del cuadrado*/
 void Square::Update()
 {
-	if (input->keyPressed(SDL_SCANCODE_SPACE)) {
-		jumping = true;
+	if (input->MousePosition().x > rect.x && input->MousePosition().x < rect.x + rect.w &&
+		input->MousePosition().y > rect.y && input->MousePosition().y < rect.y + rect.h 
+		) {
+		if (input->MouseButtonDown(InputManager::left) && setActive == false) {
+			setActive = true;
+			wcout <<L"X: " << input->MousePosition().x << L"X: " << input->MousePosition().y << endl;
+		}
 	}
-	Jump();
-	MoveObject();
+	//Si el objeto está activado, se puede mover, si no lo está no puede moverse
+	if (setActive == true) {
+		MoveObject();
+	}
 }
 
 /*El objeto puede moverse de derecha a izquierda, arriba a abajo*/
@@ -139,31 +148,6 @@ bool Square::OnCollisionDetection(SDL_Rect rect)
 	}
 }
 
-/*El sprite salta*/
-void Square::Jump()
-{
-	try {
-		
-		/*Si jump es verdadero, la posición del jugador subirá hasta el salto máximo*/
-		if (jumping) {
-			if (position.y <= maxHeight) { //Si el salto es igual a la altura máxima, cambiar jump a false
-				jumping = false;
-			}
-			position.y -= 10; //Reduce -10 a la posición del jugador
-			rect.y = position.y;
-		}
-		if(!jumping){ //Si jump es negativo, pregunta si la posición es menor a la posición original
-			if (position.y < maxHeight + 50) {
-				position.y += 10; //Aumenta 10 a la y del jugador
-				rect.y = position.y;
-			}
-		}
-	}
-	catch (...) {
-
-	}
-}
-
 
 /*Crea un objeto por medio de Lua, abriendo el texto especificado en el argumento
  *@param[string fileName] el nombre del archivo que se abrirá para lua*/
@@ -183,19 +167,19 @@ void Square::lua_CreateObject(string fileName)
 				if (cin.fail()) //Si el usuario implementa una letra manda error
 					throw(numb);
 				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
-				cout << "Pos Y: ";
+				wcout << "Pos Y: ";
 				cin >> numb;
 				if (cin.fail())//Si el usuario implementa una letra manda error
 					throw(numb);
 				lua_pushnumber(lua->GetState(), numb); //Ingresa el valor a lua
-				cout << "Width: ";
+				wcout << "Width: ";
 				numb = 100;
 				cin >> numb;
 
 				if (cin.fail())//Si el usuario implementa una letra manda error
 					throw(numb);
 				lua_pushnumber(lua->GetState(), numb); //Ingresa el valor a lua
-				cout << "Height: ";
+				wcout << "Height: ";
 				cin >> numb;
 				if (cin.fail())//Si el usuario implementa una letra manda error
 					throw(numb);
@@ -207,16 +191,28 @@ void Square::lua_CreateObject(string fileName)
 					this->position = square->position;
 					this->width = square->width; this->height = square->height;
 					this->rect = square->rect;
-					cout << "Lua created a square\n";
+					wcout << "Lua created a square\n";
 				}
 			}
 		}
 	}
 	catch (int x) {
-		cout << "This is a bad input, you need to write a number\n";
+		String s = "This is a bad input, you need to write a number\n";
+		s.PrintWString();
+		console->finalMSG += s.GetWString();
 	}
 	catch (exception & e) {
-
+		String s;
+		SetConsoleTextAttribute(handler, 4);
+		if (console->languages == 0) {
+			s = "HUBO UNA EXEPCIÓN";
+			s.PrintWString();
+		}
+		else if (console->languages == 1) {
+			 s = "THERE WAS AN EXCEPTION";
+			s.PrintWString();
+		}
+		console->finalMSG += s.GetWString();
 	}
 	catch (...) {
 
@@ -227,9 +223,11 @@ void Square::lua_CreateObject(string fileName)
 void Square::SetUpValues()
 {
 	try {
+		SetConsoleTextAttribute(handler, 5);
 		String s = "Ingrese valores para la creación de su cuadro.\n";
 		s.PrintWString();
 		int x = 0;
+		SetConsoleTextAttribute(handler, 7);
 		wcout << "Pos X: ";
 		cin >> x;
 		if (cin.fail()) //Si el usuario implementa una letra manda error
@@ -252,8 +250,8 @@ void Square::SetUpValues()
 		if (cin.fail())//Si el usuario implementa una letra manda error
 			throw(height);
 		rect.w = width; rect.h = height; //Se actualizan las dimensiones del cuadrado
-		position.x = rect.x= x - width/2; position.y = rect.y = y - height/2; //Se actualizan las posiciones en del cuadrado 
-		maxHeight = position.y - 50;
+		position.x = rect.x= x - width/2; position.y = rect.y = y - height/2; //Se actualizan las posiciones en del cuadrado }
+		SetConsoleTextAttribute(handler, 2);
 		s =  "Escribe los colores de tu cuadrado en numeros. Solo se pueden de 1 a 3 digitos. (Numero maximo 255, minimo 0)\n";
 		s.PrintWString();
 		wstring s2;
@@ -266,11 +264,20 @@ void Square::SetUpValues()
 		b = stoi(s2);		
 		if (r < 0 || r >255 || g < 0 || g >255 || b < 0 || b >255)
 			throw - 1;
+		SetConsoleTextAttribute(handler, 1);
 		s = "Color: " + to_string((int)r) + ", " + to_string((int)g )+ ", " + to_string((int)b) + ", " + to_string((int)a);
 		s.PrintWString();
 		collider = rect;
 	}
 	catch (int x) {
-		wcout << "There was an error in your code!\n";
+		SetConsoleTextAttribute(handler, 4);
+		if (console->languages == 0) {
+			String s = "Hubo un error en tu código! Mal elemento para tu caudrado";
+			s.PrintWString();
+		}
+		else if (console->languages == 1) {
+			String s = "There was an error in your code! Wrong element for your square";
+			s.PrintWString();
+		}
 	}
 }

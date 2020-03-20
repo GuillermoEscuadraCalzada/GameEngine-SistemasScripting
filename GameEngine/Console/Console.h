@@ -11,6 +11,8 @@ public:
 	static Console* GetPTR();
 	void SaveConsole();
 	String finalMSG;
+	enum LANGUAGE { SPANISH, ENGLISH };
+	LANGUAGE languages;
 private:
 	static Console* ptr;
 	Console();

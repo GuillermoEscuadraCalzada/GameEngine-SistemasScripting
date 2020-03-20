@@ -16,6 +16,7 @@ public:
 	virtual void Jump();
 	Uint8 r, g, b, a; //Colores RGB del 
 	virtual bool OnCollisionDetection(SDL_Rect rect);
+	Console* console;
 };
 
 

@@ -1,12 +1,14 @@
 #include "GameScreen.h"
 bool createObj = false;
 GameScreen::GameScreen() {
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	timer = Timer::getPTR();	//Busca el apuntador del tiempo
 	input = InputManager::getPtr();	//Busca el apuntador del input
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	textureList = new myVector<Texture*>();
 	primitivesList = new AssetList<Primitives*>();
 	stackAllocator = StackAllocator::getPTR();
+	console = Console::GetPTR();
 }
 
 GameScreen::~GameScreen()
@@ -32,6 +34,61 @@ void GameScreen::setCharacter(Texture* character) {
 
 }
 
+void GameScreen::CreateObjects()
+{
+	try {
+		if (createObj == false) {
+			SetConsoleTextAttribute(hConsole, 6);
+
+			if (console->languages == 0)
+				s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
+			else if (console->languages == 1)
+				s = "Press button 1 to create a Square.\nPress button 2 to create a circle.";
+			s.PrintWString();
+			createObj = true;
+		}
+		//std::this_thread::sleep_for(std::chrono::seconds(5));
+		if (input->keyPressed(SDL_SCANCODE_1)) {
+			void* buff = stackAllocator->alloc(sizeof(Square*));
+			Square* sq = new /*(buff)*/ Square();
+			sq->SetUpValues();
+			//Square* sq = new Square();
+			//sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
+			SetConsoleTextAttribute(hConsole, 2);
+
+			wstring name;
+			if (console->languages == 0)
+				name = L"Escribe el nombre de tu objeto\n";
+			else if (console->languages == 1)
+				name = L"Write the name of your object\n";
+			wcout << name;
+			wcin >> name;
+			primitivesList->push_back(name, sq);
+			primitivesList->print();
+			createObj = false;
+		}
+		else if (input->keyPressed(SDL_SCANCODE_2)) {
+			void* buff = stackAllocator->alloc(sizeof(Circle*));
+			Circle* circle = new /*(buff)*/ Circle();
+			circle->SetUpValues();
+			SetConsoleTextAttribute(hConsole, 2);
+			wstring name;
+			if (console->languages == 0)
+				name = L"Escribe el nombre de tu objeto\n";
+			else if (console->languages == 1)
+				name = L"Write the name of your object\n";
+			wcout << name;
+			wcin >> name;
+			primitivesList->push_back(name, circle);
+			primitivesList->print();
+			createObj = false;
+		}
+	}
+	catch (...) {
+
+	}
+}
+
 /*Regresa el apuntador al fondo de la pantalla*/
 Texture* GameScreen::GetBackGround() {
 	try {
@@ -41,10 +98,17 @@ Texture* GameScreen::GetBackGround() {
 			throw(backGround); //Lanza un error
 	} catch(Texture * text) {
 		SetConsoleTextAttribute(hConsole, 4);
-		String s = "Este objeto es nulo.";
-		s.PrintWString();
+		if (console->languages == 0) {
+			String s = "Este objeto es nulo.";
+			s.PrintWString();
+		}
+		else if (console->languages == 1) {
+			String s = "This object is nil.";
+			s.PrintWString();
+		}
+		console->finalMSG += s.GetWString();
 	}
-
+	
 }
 
 /*Se obtiene un nuevo jugador*/
@@ -67,9 +131,14 @@ void GameScreen::Update()
 {
 	try
 	{
-		//input->Update();
+		input->Update();
 		if (createObj == false) {
-			s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
+			SetConsoleTextAttribute(hConsole, 6);
+		
+			if (console->languages == 0)
+				s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
+			else if (console->languages == 1)
+				s = "Press button 1 to create a Square.\nPress button 2 to create a circle.";
 			s.PrintWString();
 			createObj = true;
 		}
@@ -80,15 +149,16 @@ void GameScreen::Update()
 			sq->SetUpValues();
 			//Square* sq = new Square();
 			//sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
+			SetConsoleTextAttribute(hConsole, 2);
 
-			wstring name = L"Escribe el nombre de tu objeto\n";
+			wstring name;
+			if (console->languages == 0)
+				name = L"Escribe el nombre de tu objeto\n";
+			else if (console->languages == 1)
+				name = L"Write the name of your object\n";
 			wcout << name;
 			wcin >> name;
-			primitivesMap.insert(pair<wstring, Square*>(name, sq));
-
 		    primitivesList->push_back(name, sq);
-			//Circle* circle = new  Circle(10, 400, 400, 200, 100, 50);
-			//primitivesList->push_back(L"Circle", circle);
 			primitivesList->print();
 			createObj = false;
 		}
@@ -96,15 +166,17 @@ void GameScreen::Update()
 			void* buff = stackAllocator->alloc(sizeof(Circle*));
 			Circle* circle = new /*(buff)*/ Circle();
 			circle->SetUpValues();
-			wstring name = L"Escribe el nombre de tu objeto\n";
+			SetConsoleTextAttribute(hConsole, 2);
+			wstring name;
+			if (console->languages == 0)
+				name = L"Escribe el nombre de tu objeto\n";
+			else if (console->languages == 1)
+				name = L"Write the name of your object\n";
 			wcout << name;
 			wcin >> name;
 			primitivesList->push_back(name, circle);
 			primitivesList->print();
 			createObj = false;
-		}
-		if (primitivesMap.size() > 0) {
-
 		}
 		if (primitivesList->getSize() > 0) {
 			AssetNode<Primitives*>* it = primitivesList->first;
@@ -117,7 +189,14 @@ void GameScreen::Update()
 
 	} catch(std::exception & e){
 		SetConsoleTextAttribute(hConsole, 4);
-		wcout << "Exception caught: " << e.what() << std::endl;
+		if (console->languages == 0) {
+			String s = "EXCEPCIÓN ATRAPADA: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
+		else if (console->languages == 1) {
+			String s = "EXCEPTION CAUGHT: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
 	}
 }
 
@@ -133,14 +212,18 @@ void GameScreen::Render()
 				it = it->next;
 			}
 		}
-		//if(backGround)	
-		//	backGround->Render(); ///Renderiza el fondo
-		//if(character)
-		//	character->Render(); //Renderiza el personaje
+
 	} catch(exception & e)
 	{
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "EXCEPTION CAUGHT: " << e.what() << endl;
+		if (console->languages == 0) {
+			String s = "EXCEPCIÓN ATRAPADA: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
+		else if (console->languages == 1) {
+			String s = "EXCEPTION CAUGHT: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
 	}
 }
 
@@ -155,6 +238,13 @@ void GameScreen::Init() {
 		//GetCharacter()->setPosition(Vector2(400, 400)); //Establece su posición
 	} catch(exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "EXCEPTION CAUGHT: " << e.what() << endl;
+		if (console->languages == 0) {
+			String s = "EXCEPCIÓN ATRAPADA: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
+		else if (console->languages == 1) {
+			String s = "EXCEPTION CAUGHT: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
 	}
 }

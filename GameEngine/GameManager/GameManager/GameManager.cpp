@@ -5,6 +5,7 @@ GameManager* GameManager::ptr = nullptr;
 GameManager::GameManager()
 {
 	try {
+		/*Inicialización del stack allocator*/
 		stackAllocator = StackAllocator::getPTR();
 		console = Console::GetPTR();
 		if (!console) throw(console);
@@ -16,8 +17,8 @@ GameManager::GameManager()
 		if (wcin.fail()|| stoi(str) > 2 || stoi(str) <1)
 			throw(-1);
 
-		if (str == L"1") languages = SPANISH;
-		else if(str == L"2") languages = ENGLISH;
+		if (str == L"1") console->languages = console->SPANISH;
+		else if(str == L"2")  console->languages = console->ENGLISH;
 		//lua->Test("Prueba.lua");
 		//lua->TestCallFunctionFromCPP("Prueba.lua");
 		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -25,12 +26,13 @@ GameManager::GameManager()
 		GetSingletons();
 	}
 	catch (int x) {
-		if (languages == 0) {
+		SetConsoleTextAttribute(hConsole, 4);
+		if (console->languages == 0) {
 			String s = "Hubo un error al elegir el lenguaje ";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s = "There was an error selecting the language ";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -40,12 +42,12 @@ GameManager::GameManager()
 	}
 	catch (exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "EXCEPCIÓN ATRAPADA: ";
 			wcout << s.GetWString() << e.what() << endl;
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			cout << "EXCEPTION CAUGHT: " << e.what() << endl;
 		}
 		Close();
@@ -114,7 +116,7 @@ void GameManager::StartUp()
 	try
 	{
 		String s;
-		/*Inicialización del stack allocator*/
+	
 		clock_t t = clock();
 		graphics->setWidth(stackAllocator->getPTR()->iniReader->GetInteger("window", "width", -1)); //Se setea la anchura de la ventana
 		graphics->setHeight(stackAllocator->getPTR()->iniReader->GetInteger("window", "height", -1)); //Se setea la altura de la ventana
@@ -122,19 +124,19 @@ void GameManager::StartUp()
 		//stackAllocator = new StackAllocator(1024 * 1024 * thirdMemory);
 		clock_t dt = clock() - t;
 		SetConsoleTextAttribute(hConsole, 2);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			s =("Tomó " + to_string((float)dt / CLOCKS_PER_SEC)+ "segundos inicializar StackAllocator." );
 			s.PrintWString();
-		} else if (languages == 1) {
+		} else if (console->languages == 1) {
 			s = ("It took " + to_string((float)dt / CLOCKS_PER_SEC) + "seconds to initialize.");
 			s.PrintWString();
 		}
 		int n = 100000;
 		t = clock() - t;
-		if (languages == 0) {
+		if (console->languages == 0) {
 			s = "Tomó " + to_string((float)t / CLOCKS_PER_SEC) + " segundos asignar con memoria dinamica.\n";
 			s.PrintWString();
-		} else if (languages == 1) {
+		} else if (console->languages == 1) {
 			s = "It took " + to_string((float)dt / CLOCKS_PER_SEC) + "seconds to assign with dynamic memory.";
 			s.PrintWString();
 		}
@@ -143,11 +145,12 @@ void GameManager::StartUp()
 	}
 	catch(const std::exception& e)
 	{
-		if (languages == 0) {
+		SetConsoleTextAttribute(hConsole, 4);
+		if (console->languages == 0) {
 			String s = "EXCEPCIÓN ATRAPADA: ";
 			wcout << s.GetWString() << e.what() << endl;
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s = "EXCEPTION CAUGHT: ";
 			wcout << s.GetWString() << e.what() << endl;
 		}
@@ -252,12 +255,12 @@ void GameManager::GetSingletons()
 	catch (Timer * timer) {
 		SetConsoleTextAttribute(hConsole, 4);
 
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "PELIGRO: TIMER NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s = "WARNING: TIMER DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -266,12 +269,12 @@ void GameManager::GetSingletons()
 	}
 	catch (Graphics * graphics) {
 		SetConsoleTextAttribute(hConsole, 4);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "PELIGRO: GRAPHICS NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s = "WARNING: GRAPHICS DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -280,12 +283,12 @@ void GameManager::GetSingletons()
 	}
 	catch (AssetManager * assetM) {
 		SetConsoleTextAttribute(hConsole, 4);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "PELIGRO: ASSET MANAGER NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s ="WARNING: ASSET MANAGER DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -293,12 +296,12 @@ void GameManager::GetSingletons()
 		exit(0);
 	}
 	catch (InputManager * inputMGR) {
-		if (languages ==0) {
+		if (console->languages ==0) {
 			String s = "PELIGRO: INPUT MANAGE NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s = "WARNING: INPUT MANAGER DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -308,12 +311,12 @@ void GameManager::GetSingletons()
 	}
 	catch (AudioManager * audioMGR) {
 		SetConsoleTextAttribute(hConsole, 4);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "PELIGRO: AUDIO MANAGER NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s =  "WARNING: AUDIO MANAGER DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -322,12 +325,12 @@ void GameManager::GetSingletons()
 	}
 	catch (ScreenManager * screenMGR) {
 		SetConsoleTextAttribute(hConsole, 4);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "PELIGRO: SCREEN MANAGER NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages ==1) {
+		else if (console->languages ==1) {
 			String s = "WARNING: SCREEN MANAGER DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
@@ -336,12 +339,12 @@ void GameManager::GetSingletons()
 	}
 	catch (Console * console) {
 		SetConsoleTextAttribute(hConsole, 4);
-		if (languages == 0) {
+		if (console->languages == 0) {
 			String s = "PELIGRO: CONSOLE NO PUDO ABRIRSE";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";
 		}
-		else if (languages == 1) {
+		else if (console->languages == 1) {
 			String s = "WARNING: CONSOLE DIDN'T OPEN";
 			s.PrintWString();
 			console->finalMSG += s.GetWString() + L"\n";

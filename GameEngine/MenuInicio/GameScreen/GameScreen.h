@@ -19,16 +19,16 @@ public:
 	void Init();
 	GameScreen();
 	~GameScreen();
-
+	HANDLE hConsole;
 	myVector<Texture*>* textureList;
 	AssetList<Primitives*>* primitivesList;
 	map<wstring, Primitives*> primitivesMap;
 	void setBackGround(Texture* backGround);
 	void setCharacter(Texture* backGround);
-
+	void CreateObjects();
 	Texture* GetBackGround();
 	Texture* GetCharacter();
-
+	Console* console;
 	//void setStackAllocator(StackAllocator* stackAlloc);
 private:
 	float score = 0;

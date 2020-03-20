@@ -90,11 +90,8 @@ void Lua::Test(string fileName)
 				int state = -3;
 				Sprite* sprite = (Sprite*)lua_touserdata(lua, -4);
 				sprite->x = sprite->y = 0;
-				lua_pop(lua, state); state++;
 				lua_Number vecX = lua_tonumber(lua, state);
-				lua_pop(lua, state); state++;
 				lua_Number vecY = lua_tonumber(lua, state);
-				lua_pop(lua, state); state++;
 				sprite->MoveObject((int)vecX, (int)vecY);
 				return 0;
 			};

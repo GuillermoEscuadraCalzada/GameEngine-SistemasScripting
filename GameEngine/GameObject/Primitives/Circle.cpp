@@ -20,11 +20,15 @@ Circle::Circle(int radius, int x, int y, Uint8 r, Uint8 g, Uint8 b)
 
 Circle::Circle()
 {
-
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	input = InputManager::getPtr();
+	timer = Timer::getPTR();
+	graphics = Graphics::returnPTR();
 }
 
 Circle::~Circle()
 {
+
 }
 
 void Circle::Render()
@@ -33,10 +37,37 @@ void Circle::Render()
 	GenerateCircle();
 }
 
+/*El círculo pued moverse*/
 void Circle::MoveObject()
 {
 	try {
-		
+		width = rect.w;
+		height = rect.h;
+		if (input->keyDown(SDL_SCANCODE_D)) {
+			position.x += 10;
+			if (position.x > graphics->SCREEN_WIDTH) //Pregunta si el cuadrado se sale del lado derecho de la pantalla
+				position.x = 0;
+			rect.x = position.x; //Actualiza la posición del rect del cuadrado en el eje X
+		}
+		else if (input->keyDown(SDL_SCANCODE_A)) {
+			position.x -= 10;
+			if (position.x + width < 0)//Pregunta si el cuadrado se sale del lado izquierdo de la pantalla
+				position.x = graphics->SCREEN_WIDTH;
+			rect.x = position.x;//Actualiza la posición del rect del cuadrado en el eje X
+		}
+		else if (input->keyDown(SDL_SCANCODE_W)) {
+			position.y -= 10;
+			if (position.y < 0)//Pregunta si el cuadrado se sale del de arriba de la pantalla
+				position.y = graphics->SCREEN_HEIGHT;
+			rect.y = position.y;//Actualiza la posición del rect del cuadrado en el eje Y
+
+		}
+		else if (input->keyDown(SDL_SCANCODE_S)) {
+			position.y += 10;
+			if (position.y > graphics->SCREEN_HEIGHT)//Pregunta si el cuadrado se sale del lado de abajo de la pantalla
+				position.y = 0;
+			rect.y = position.y;//Actualiza la posición del rect del cuadrado en el eje Y
+		}
 	}
 	catch (...) {
 
@@ -45,6 +76,22 @@ void Circle::MoveObject()
 
 void Circle::Update()
 {
+	try {
+		if (input->MousePosition().x > rect.x&& input->MousePosition().x < rect.x + rect.w &&
+			input->MousePosition().y > rect.y&& input->MousePosition().y < rect.y + rect.h
+			) {
+			if (input->MouseButtonDown(InputManager::left) && setActive == false) {
+				setActive = true;
+				wcout << L"X: " << input->MousePosition().x << L"X: " << input->MousePosition().y << endl;
+			}
+		}
+		if (setActive == true) {
+			MoveObject();
+		}
+	}
+	catch (...) {
+
+	}
 }
 
 /*Se determinan los valores del círculo (radio, posiciónes en X y Y, además de sus colores*/
@@ -52,9 +99,11 @@ void Circle::SetUpValues()
 {
 	try {
 		renderer = Graphics::returnPTR()->getRenderer();
+		SetConsoleTextAttribute(hConsole, 2);
 		String s = "Ingresa los valores que quires que tenga tu circunferencia.";
 		s.PrintWString();
 		int value;
+		SetConsoleTextAttribute(hConsole, 6);
 		wcout << "Radio: ";
 		cin >> value;	radius = value; //Ingresa el usuario el valor del radio y se guarda en los valores del círculo
 		diameter = radius * 2;
@@ -69,8 +118,24 @@ void Circle::SetUpValues()
 		wcout << "Color B: ";
 		cin >> value; b = value; //Determina el color B del círculo
 		a = 255;
+		if (r < 0 || r >255 || g < 0 || g >255 || b < 0 || b >255)
+			throw - 1;
 		position.x = centreX; position.y = centreY;
 		rect = { centreX - radius, centreY - radius, diameter, diameter }; collider = rect;
+	}
+	catch (int x) {
+		SetConsoleTextAttribute(hConsole, 6);
+		String s;
+		if (console->languages == 0) {
+		s = "Hubo un error en el código! Palabra ingresada en vez de número";
+		s.PrintWString();
+
+		}
+		else if (console->languages == 1) {
+			s = "There was an error with your code! You used a word instead of a number";
+			s.PrintWString();
+		}
+		console->finalMSG += s.GetWString();
 	}
 	catch (...) {
 
@@ -91,36 +156,47 @@ void Circle::GenerateCircle()
 			//Avanza mientras x sea mayor o igual a Y
 			while (x >= y) {
 
-		/*Se dibuan los puntos desde los centros del círculo*/
-		SDL_RenderDrawPoint(renderer, position.x + x, position.y - y);
-		SDL_RenderDrawPoint(renderer, position.x + x, position.y + y);
-		SDL_RenderDrawPoint(renderer, position.x - x, position.y - y);
-		SDL_RenderDrawPoint(renderer, position.x - x, position.y + y);
+				/*Se dibuan los puntos desde los centros del círculo*/
+				SDL_RenderDrawPoint(renderer, position.x + x, position.y - y);
+				SDL_RenderDrawPoint(renderer, position.x + x, position.y + y);
+				SDL_RenderDrawPoint(renderer, position.x - x, position.y - y);
+				SDL_RenderDrawPoint(renderer, position.x - x, position.y + y);
 	
-		SDL_RenderDrawPoint(renderer, position.x + y, position.y - x);
-		SDL_RenderDrawPoint(renderer, position.x + y, position.y + x);
-		SDL_RenderDrawPoint(renderer, position.x - y, position.y - x);
-		SDL_RenderDrawPoint(renderer, position.x - y, position.y + x);
+				SDL_RenderDrawPoint(renderer, position.x + y, position.y - x);
+				SDL_RenderDrawPoint(renderer, position.x + y, position.y + x);
+				SDL_RenderDrawPoint(renderer, position.x - y, position.y - x);
+				SDL_RenderDrawPoint(renderer, position.x - y, position.y + x);
 
 
-		if (error <= 0) {
-			y++;
-			error += tY;
-			tY += 2;
-		}
+				if (error <= 0) {
+					y++;
+					error += tY;
+					tY += 2;
+				}
 
-		if (error > 0) {
-			x--;
-			tX += 2;
-			error += (tX - diameter);
-		}
-	}
+				if (error > 0) {
+					x--;
+					tX += 2;
+					error += (tX - diameter);
+				}
+			}
 		}
 		else {
 			throw(0);
 		}
 	}
 	catch (int x) {
-		cout << "El circulo debe tener un radio mayor a cero.\n";
+		SetConsoleTextAttribute(hConsole, 6);
+		String s;
+		if (console->languages == 0) {
+			s = "El círculo debe tener un radio mayor a cero.\n";
+			s.PrintWString();
+
+		}
+		else if (console->languages == 1) {
+			s = "Circle must hava radius bigger than zero";
+			s.PrintWString();
+		}
+		console->finalMSG += s.GetWString();
 	}
 }

@@ -6,6 +6,7 @@ using namespace std;
 class Square : public Primitives
 {
 public:
+	HANDLE handler;
 	int width, height;
 	Square(int x, int y, int width, int height);
 	Square();
@@ -16,10 +17,9 @@ public:
 	void Update() override;
 	void MoveObject()override;
 	bool OnCollisionDetection(SDL_Rect rect) override;
-
+	bool setActive = false;
 	void lua_CreateObject(string fileName);
 	void SetUpValues();
-	void Jump() override;
 	int maxHeight;
 	bool jumping = false;
 };
