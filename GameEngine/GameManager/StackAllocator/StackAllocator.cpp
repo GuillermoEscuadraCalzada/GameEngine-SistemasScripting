@@ -46,7 +46,7 @@ StackAllocator* StackAllocator::getPTR()
 void* StackAllocator::alloc(size_t allocsize)
 {
 	//comprobar si la memoria pedida es igual o menor al tamano que queda en el stack
-	if(allocsize < maxSize - marker - prev )
+	if(prev + allocsize <= maxSize)
 	{
 		prev = marker;
 		marker = marker + allocsize;

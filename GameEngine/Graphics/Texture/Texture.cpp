@@ -7,11 +7,12 @@ Texture::Texture()
 
 /*Constructor de la clase Texture, requiere de un string que será la ubicación de la imagen
 	@param[ path ] ubiación de donde se encuentra la imagen*/
-Texture::Texture(std::string path)
+Texture::Texture(std::wstring path)
 {
 	rect = new SDL_Rect();
 
 	graphics = Graphics::returnPTR();	//Manda a crear o llamar el apuntador de la clase graphics
+
 	texture = AssetManager::getPTR()->GetTexture(path);	//Manda a llamar dos clases, AssetManagerPTR, donde obtiene su apuntador y luego GetTexture, donde consigue la imagen 
 	this->textText = path;
 	clipped = false;
@@ -28,7 +29,7 @@ Texture::Texture(std::string path)
 	@param[y] posición de la imagen en Y donde comienza la animación
 	@param[w} anchura del segmento de la imagen
 	@param[h] altura del segmento d ela imagen*/
-Texture::Texture(std::string path, int x, int y, int w, int h, int id)
+Texture::Texture(std::wstring path, int x, int y, int w, int h, int id)
 {
 	graphics = Graphics::returnPTR();	//Pregunta por el apuntador de la clase Graphics
 	texture = AssetManager::getPTR()->GetTexture(path);	//Pregunta por el apuntador de la classe assetManager y luego busca la función de GetTexture
@@ -49,7 +50,7 @@ Texture::Texture(std::string path, int x, int y, int w, int h, int id)
 
 }
 
-Texture::Texture(std::string path, int x, int y, int w, int h)
+Texture::Texture(std::wstring path, int x, int y, int w, int h)
 {
 	graphics = Graphics::returnPTR();	//Pregunta por el apuntador de la clase Graphics
 	texture = AssetManager::getPTR()->GetTexture(path);	//Pregunta por el apuntador de la classe assetManager y luego busca la función de GetTexture
@@ -71,10 +72,11 @@ Texture::Texture(std::string path, int x, int y, int w, int h)
 	@param[fontPath] ubicación del font dentro del archivo del juego
 	@param[size] tamaño de las letras del texto.
 	@param[ color ] color de las palabras*/ 
-Texture::Texture(std::string text, std::string fontPath, int size, SDL_Color _color)
+Texture::Texture(std::wstring text, std::wstring fontPath, int size, SDL_Color _color)
 {
 	graphics = Graphics::returnPTR();	//Llama el apuntador de graphics
 	color = _color;
+	String s;
 	texture = AssetManager::getPTR()->GetText(text, fontPath, size , color);	//Obtiene el texto de assetManager
 	textText = AssetManager::getPTR()->text;
 	this->fontPath = fontPath;
@@ -89,9 +91,7 @@ Texture::Texture(std::string text, std::string fontPath, int size, SDL_Color _co
 
 Texture::~Texture()
 {
-	
-	texture = nullptr;
-	graphics = nullptr;
+
 }
 
 /*Esta función ubicará a las imágenes donde se haya especificado*/

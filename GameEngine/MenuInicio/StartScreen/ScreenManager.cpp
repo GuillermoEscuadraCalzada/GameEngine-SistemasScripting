@@ -9,7 +9,7 @@ ScreenManager::ScreenManager()
 	input = InputManager::getPtr();	  //Apuntador de la clase Input
 	currentScreen = play;		     //El enum comienza con la variable start
 	void* buff = StackAllocator::getPTR()->alloc(sizeof(GameScreen*));
-	gameScreen = new /*(buff)*/ GameScreen();
+	gameScreen = new (buff) GameScreen();
 
 }
 
@@ -18,8 +18,10 @@ ScreenManager::~ScreenManager()
 {
 	
 	input = nullptr;	//Input se hace nulo
-	delete gameScreen;	//Elimina el objeto de GameScreen
-	gameScreen = nullptr;	//Lo hace nulo
+	if (gameScreen) {
+		delete gameScreen;	//Elimina el objeto de GameScreen
+		gameScreen = nullptr;	//Lo hace nulo
+	}
 
 }
 
@@ -36,8 +38,9 @@ ScreenManager* ScreenManager::getPTR()
 /*Elimina el apuntador y lo hace nulo*/
 void ScreenManager::Release()
 {
-	delete ptr;
+	//delete ptr;
 	ptr = nullptr;
+	//ptr = nullptr;
 }
 
 /*Se inicializan todas las diferentes ventanas de juego*/

@@ -64,5 +64,5 @@ float Timer::TimeScale()
 void Timer::Update()
 {
 	elapsedTime = SDL_GetTicks() - startTicks;	//ElapsedTime es el tiempo inicial del juego menos el tick inicial
-	deltaTime = elapsedTime * 0.001f;	//Delta time es elapsed time por .001 ya que elapsed time viene en milisegundos
+	deltaTime = elapsedTime ;	//Delta time es elapsed time por .001 ya que elapsed time viene en milisegundos
 }

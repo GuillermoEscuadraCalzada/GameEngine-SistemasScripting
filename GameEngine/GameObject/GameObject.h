@@ -3,6 +3,8 @@
 
 #include "Vector2.h"
 #include "../Graphics/Graphics/Graphics.h"
+#include "../GameManager/InputManager/InputManager.h"
+#include "../GameManager/Timer/Timer.h"	
 #include <string>
 #include <iostream>
 class GameObject
@@ -24,7 +26,9 @@ public:
 
 	float length(Vector2 thisVec);
 	Lua* lua = Lua::GetPTR();
-
+	InputManager* input;
+	Graphics* graphics;
+	Timer* timer;
 private:
 	Vector2 Pos;
 	virtual void Update();

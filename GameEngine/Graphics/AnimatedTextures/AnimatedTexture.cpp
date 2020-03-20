@@ -1,6 +1,6 @@
 #include "AnimatedTexture.h"
 
-AnimatedTexture::AnimatedTexture(string fileName, int x, int y,int w, int h, int frameCount, float animationSpeed, ANIM_DIR animDir) : Texture(fileName, x, y, w, h)
+AnimatedTexture::AnimatedTexture(wstring fileName, int x, int y,int w, int h, int frameCount, float animationSpeed, ANIM_DIR animDir) : Texture(fileName, x, y, w, h)
 {
 	timer = Timer::getPTR();
 

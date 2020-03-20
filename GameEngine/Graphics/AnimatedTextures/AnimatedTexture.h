@@ -11,7 +11,7 @@ public:
 	enum WRAP_MODE{once = 0, loop = 1};
 	enum ANIM_DIR{horizontal = 0, vertical = 1};
 
-	AnimatedTexture(string fileName, int x, int y, int w, int h, int frameCount, float animationSpeed, ANIM_DIR animDir);
+	AnimatedTexture(wstring fileName, int x, int y, int w, int h, int frameCount, float animationSpeed, ANIM_DIR animDir);
 	~AnimatedTexture();
 
 	void WrapMode(WRAP_MODE mode);

@@ -29,6 +29,7 @@ void Graphics::Release()
 /*Constructor de la clase graphics*/
 Graphics::Graphics()
 {
+	console = Console::GetPTR();
 	renderer = nullptr; //Haz nulo el renderer
 }
 
@@ -100,7 +101,9 @@ bool Graphics::Init()
 	}
 	catch (string str) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << str << endl;
+		String s = str;
+		s.PrintWString();
+		console->finalMSG += s.GetWString() + L"\n";
 		return false;
 	}
 	catch(...) {
@@ -124,10 +127,14 @@ void Graphics::setWidth(int width)
 		}
 	} catch(int x)
 	{
-		cout << "Your width : " << x << " is out of bounds (0 - 1920)\n";
+		String s = "Your width : " + to_string(x) + " is out of bounds (0 - 1920)";
+		s.PrintWString();
+		console->finalMSG += s.GetWString() + L"\n";
 	} catch(exception & e)
 	{
-		cout << "EXCEPTION CAUGHT:" << e.what() << endl;
+		String s = "EXCEPTION CAUGHT: ";
+		wcout << s.GetWString() << e.what() << endl;
+		console->finalMSG += s.GetWString() + L"\n";
 	}
 }
 
@@ -187,10 +194,11 @@ SDL_Surface* Graphics::GetSurface()
 	@param[ path ] direccion dentro de la carpeta donde se encuentra el archivo
 	@param[ vector ] vector al que se le añadirá la información
 	@return[texture] una textura que modificará el surface actual*/
-SDL_Texture* Graphics::LoadTexture(std::string path, AssetList<SDL_Texture*>& vector)
+SDL_Texture* Graphics::LoadTexture(std::wstring path, AssetList<SDL_Texture*>& vector)
 {
 	SDL_Texture* texture = NULL;	//Empieza en nula 
-	SDL_Surface* surface = IMG_Load(path.c_str());	//Esta superficie toma la imagen de este path
+	string s(path.begin(), path.end());
+	SDL_Surface* surface = IMG_Load(s.c_str());	//Esta superficie toma la imagen de este path
 
 	//Si es nulo, manda a llamar ese error
 	if(surface == nullptr)
@@ -221,10 +229,11 @@ SDL_Texture* Graphics::LoadTexture(std::string path, AssetList<SDL_Texture*>& ve
 	@áram[key] llave que distinguirá a los textos
 	@param[ textVector ] vector de textos que almacenará un nuevo elemento
 	@param */
-SDL_Texture* Graphics::CreateTextTexture(TTF_Font* font, std::string text, std::string key, 
+SDL_Texture* Graphics::CreateTextTexture(TTF_Font* font, std::wstring text, std::wstring key, 
 										 AssetList<SDL_Texture*>& textVector, AssetList<TTF_Font*>& fontVector, SDL_Color color)
 {
-	SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);	//Crea una superficie con el texto indicado, junto a su font y color
+	string s(text.begin(), text.end());
+	SDL_Surface* surface = TTF_RenderText_Solid(font, s.c_str(), color);	//Crea una superficie con el texto indicado, junto a su font y color
 	
 	//Si la superficie es nula, imprime su error
 	if(surface == nullptr)

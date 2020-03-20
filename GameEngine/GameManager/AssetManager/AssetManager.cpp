@@ -6,6 +6,7 @@ AssetManager* AssetManager::ptr = nullptr;
 
 AssetManager::AssetManager()
 {
+	console = Console::GetPTR();
 }
 
 /*Destructo de la clase AssetManager. Buscará cerrar todas las librerías externas
@@ -95,17 +96,18 @@ void AssetManager::Close()
 /*Esta función busca la dirección de la imagen dentro de los achivos
 	@param[ filenName ]  Nombre de la textura dentro del archivo del proyecto
 	@return un apuntador a SDL_Texture*/
-SDL_Texture* AssetManager::GetTexture(std::string fileName)
+SDL_Texture* AssetManager::GetTexture(std::wstring fileName)
 {
 	try
 	{
 		std::string fullPath = SDL_GetBasePath();	//Este string con la función SDL_GetBasePath busca dentro de todos los archivos hasta encontrar con la ubicación correcta del Debug
-		fullPath.append("Assets/Textures/" + fileName);	//Esto toma el archivo donde guardaremos la dirección y le añadirá el nombre de la imagen
-		SDL_Texture* text = textures.returnTemplate(fullPath);	//Crea una variable que guarde la posición de la textura en el vector de texturas
+		String s = fullPath;
+		s.GetWString().append(L"Assets/Textures/" + fileName);
+		SDL_Texture* text = textures.returnTemplate(s.GetWString());	//Crea una variable que guarde la posición de la textura en el vector de texturas
 		
 		/*Si esta función regresa nula*/
 		if(text == NULL)
-			text = Graphics::returnPTR()->LoadTexture(fullPath, textures); //Crea una variable SDL_Texture y carga una textura al vector de texturas
+			text = Graphics::returnPTR()->LoadTexture(s.GetWString(), textures); //Crea una variable SDL_Texture y carga una textura al vector de texturas
 		
 	
 		return text;	//Regresa esta textura
@@ -125,19 +127,20 @@ SDL_Texture* AssetManager::GetTexture(std::string fileName)
 	@param[ size ] tamaño de la palabras
 	@param[ color ] color de las palabras
 	@return una textura que se podrá imprimir en la pantalla*/
-SDL_Texture* AssetManager::GetText(string text, string fileName, int size, SDL_Color color)
+SDL_Texture* AssetManager::GetText(wstring text, wstring fileName, int size, SDL_Color color)
 {
 	try
 	{
 		
 		TTF_Font* myFont = GetFont(fileName, size);	//Crea un font con sus respectivas características
-
-		string key = text + fileName + (char)size +(char)color.r+ (char)color.g + (char)color.b;	//Crea una llave que distinguirá a todos los fonts 
+		string s = (char*)size + (char)color.r + (char)color.g + (char)color.b;
+		String s2 = "";
+		s2 += text + fileName + s2.convert(s);	//Crea una llave que distinguirá a todos los fonts 
 		this->text = text;
-		SDL_Texture* texture = texts.returnTemplate(key);
+		SDL_Texture* texture = texts.returnTemplate(s2.GetWString());
 		//Pregunta si el font ya fue creado
 		if(texture == nullptr)
-			texture = Graphics::returnPTR()->CreateTextTexture(myFont, text, key, texts, font, color); //Crea una textura con las características creadas
+			texture = Graphics::returnPTR()->CreateTextTexture(myFont, text, s2.GetWString(), texts, font, color); //Crea una textura con las características creadas
 		
 		return texture;
 
@@ -154,13 +157,14 @@ SDL_Texture* AssetManager::GetText(string text, string fileName, int size, SDL_C
 dirección
 	@param[ fileName ] ubicación del archivo Debug
 	@return archivo de música que se reproducirá*/
-Mix_Music* AssetManager::GetMusic(string fileName)
+Mix_Music* AssetManager::GetMusic(wstring fileName)
 {
 	try
 	{
 		string fullPath = SDL_GetBasePath();	//Consigue el directorio base del archivo
-		fullPath.append("Assets/Music/" + fileName);	//Agrega este string a full path
-		Mix_Music* myMusic = music.returnTemplate(fullPath);
+		String s = fullPath;
+		s.GetWString().append(L"Assets/Music/" + fileName);	//Agrega este string a full path
+		Mix_Music* myMusic = music.returnTemplate(s.GetWString());
 		//Busca en lista de música si es que ya existe
 		if( myMusic== nullptr)
 		{
@@ -189,11 +193,12 @@ Mix_Music* AssetManager::GetMusic(string fileName)
 /*Función que se encargará de obtener el sound effect dentro de los archivos de SFX. Si no existe en el vector de sfx, lo creará, pero si ya existe 
 regresará este sfx.
 	@param[ fileName ]*/
-Mix_Chunk* AssetManager::GetSFX(string fileName)
+Mix_Chunk* AssetManager::GetSFX(wstring fileName)
 {
 	string fullPath = SDL_GetBasePath();	//Busca el archivo Debug dentro del archivo de juego
-	fullPath.append("Assets/SFX/" + fileName);	//Añadirá las carpetas indicadas al string de fullPath
-	Mix_Chunk* chunk = sfx.returnTemplate(fullPath);
+	String s = fullPath;
+	s.GetWString().append(L"Assets/SFX/" + fileName);	//Añadirá las carpetas indicadas al string de fullPath
+	Mix_Chunk* chunk = sfx.returnTemplate(s.GetWString());
 	//Buscará en el vector de sfx si ya existe el archivo con esta dirección
 	if( chunk == nullptr)
 	{
@@ -213,22 +218,25 @@ Mix_Chunk* AssetManager::GetSFX(string fileName)
 	@param[ fileName ] Nombre del archivo
 	@param[ size ] tamaño de la letra
 	@return te regresa el font*/
-TTF_Font* AssetManager::GetFont(string fileName, int size)
+TTF_Font* AssetManager::GetFont(wstring fileName, int size)
 {
 	/*Busca la dirección desde la carpeta raíz del programa y después llega hsata Debug
 	y avanza hasta las cartpetas indicadas en el Append*/
 	string fullPath = SDL_GetBasePath();
-	fullPath.append("Assets/Fonts/" + fileName);
-
-	string key = fullPath + (char)size;	//Se consigue una llave con el fullPath + el tamaño
+	String s = fullPath;
+	s.GetWString().append(L"Assets/Fonts/" + fileName);
+	string s2 = (char*)size;
+	s.GetWString() += s.convert(s2);
 
 	//Pregunta si en el vector ya existe o si es nulo
-	if(font.returnTemplate(key) == nullptr)
+	if(font.returnTemplate(s.GetWString()) == nullptr)
 	{
 		TTF_Font* tFont = TTF_OpenFont(fullPath.c_str(), size);	//Guarda un font en esta posición
 		
-		if(tFont == nullptr)
+		if (tFont == nullptr) {
+			
 			printf("Font loading Error: Font: %s -- Error: %s", fileName.c_str(), TTF_GetError());
+		}
 		return tFont;
 	}
 

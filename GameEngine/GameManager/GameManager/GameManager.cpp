@@ -1,94 +1,166 @@
-#include "GameManager.h"
+Ôªø#include "GameManager.h"
 GameManager* GameManager::ptr = nullptr;
 
 /*Constructor principal de GameManager*/
 GameManager::GameManager()
 {
 	try {
+		stackAllocator = StackAllocator::getPTR();
+		console = Console::GetPTR();
+		if (!console) throw(console);
 		lua = Lua::GetPTR();
+		String language("Choose your language/Elige tu idioma: 1 == Espa√±ol.\n2 == English\n");
+		language.PrintWString();
+		wstring str;
+		wcin >> str;
+		if (wcin.fail()|| stoi(str) > 2 || stoi(str) <1)
+			throw(-1);
+
+		if (str == L"1") languages = SPANISH;
+		else if(str == L"2") languages = ENGLISH;
 		//lua->Test("Prueba.lua");
 		//lua->TestCallFunctionFromCPP("Prueba.lua");
 		hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		quit = false;	//Quit es falso
 		GetSingletons();
-	}  catch (exception & e) {
+	}
+	catch (int x) {
+		if (languages == 0) {
+			String s = "Hubo un error al elegir el lenguaje ";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s = "There was an error selecting the language ";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		Close();
+		quit = true;
+	}
+	catch (exception & e) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "EXCEPTION CAUGHT: " << e.what() << endl;
+		if (languages == 0) {
+			String s = "EXCEPCI√ìN ATRAPADA: ";
+			wcout << s.GetWString() << e.what() << endl;
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			cout << "EXCEPTION CAUGHT: " << e.what() << endl;
+		}
+		Close();
+		quit = true;
 	}
 }
 
 /*Destructor principal del juego, se cierran todas las clases que sean singleton y se eliminan apuntadores*/
 GameManager::~GameManager()
 {
-	//Manda a llamar la funciÛn release del juego
+	//Manda a llamar la funci√≥n release del juego
 	
-	Graphics::Release();
-	graphics = nullptr;	//Haz nulo este apuntador
+	if (graphics) {
+		Graphics::Release();
+		graphics = nullptr;	//Haz nulo este apuntador
+	}
 
+	if (assetM) {
 
 	AssetManager::Close();
 	assetM = nullptr;
+	}
+
+	if (audioMGR)
+	{
 
 	AudioManager::Release();
 	audioMGR = nullptr;
+	}
+
+	if (inputMGR) {
 
 	InputManager::Release();
 	inputMGR = nullptr;
+	}
+
+	if (timer) {
 
 	Timer::Release();
 	timer = nullptr;
+	}
 
-	ScreenManager::Release();
-	screenMGR = nullptr;
+	if (screenMGR) {
+		ScreenManager::Release();
+		screenMGR = nullptr;
+	}
+
 
 	console = nullptr;
 
 }
 
-/*Esta funciÛn te permite inicializar esta clase, preguntando si ya existe un apuntador de esta clase*/
+/*Esta funci√≥n te permite inicializar esta clase, preguntando si ya existe un apuntador de esta clase*/
 GameManager* GameManager::GetPtr()
 {
-	//Si el apuntador es nulo, crea la funciÛn, si no, no hagas nada. no se puede volver a crear
+	//Si el apuntador es nulo, crea la funci√≥n, si no, no hagas nada. no se puede volver a crear
 	if(ptr == nullptr)
 		ptr = new  GameManager();
 	
 	return ptr;	//Regresa el apuntador
 }
 
-/*Esta funciÛn setea la ventana del juego, abriendo un archivo .ini y parsea todo su contenido para leer y recuperar su informaciÛn*/
+/*Esta funci√≥n setea la ventana del juego, abriendo un archivo .ini y parsea todo su contenido para leer y recuperar su informaci√≥n*/
 void GameManager::StartUp()
 {
 	try
 	{
-		/*InicializaciÛn del stack allocator*/
+		String s;
+		/*Inicializaci√≥n del stack allocator*/
 		clock_t t = clock();
-		stackAllocator = StackAllocator::getPTR();
 		graphics->setWidth(stackAllocator->getPTR()->iniReader->GetInteger("window", "width", -1)); //Se setea la anchura de la ventana
 		graphics->setHeight(stackAllocator->getPTR()->iniReader->GetInteger("window", "height", -1)); //Se setea la altura de la ventana
 
 		//stackAllocator = new StackAllocator(1024 * 1024 * thirdMemory);
 		clock_t dt = clock() - t;
 		SetConsoleTextAttribute(hConsole, 2);
-		printf("Tomo %f segundos inicializar StackAllocator.\n", ((float)dt) / CLOCKS_PER_SEC);
-
+		if (languages == 0) {
+			s =("Tom√≥ " + to_string((float)dt / CLOCKS_PER_SEC)+ "segundos inicializar StackAllocator." );
+			s.PrintWString();
+		} else if (languages == 1) {
+			s = ("It took " + to_string((float)dt / CLOCKS_PER_SEC) + "seconds to initialize.");
+			s.PrintWString();
+		}
 		int n = 100000;
 		t = clock() - t;
-		printf("Tomo %f segundos asignar con memoria dinamica.\n", ((float)t) / CLOCKS_PER_SEC);
+		if (languages == 0) {
+			s = "Tom√≥ " + to_string((float)t / CLOCKS_PER_SEC) + " segundos asignar con memoria dinamica.\n";
+			s.PrintWString();
+		} else if (languages == 1) {
+			s = "It took " + to_string((float)dt / CLOCKS_PER_SEC) + "seconds to assign with dynamic memory.";
+			s.PrintWString();
+		}
+		//printf("Tomo %f segundos asignar con memoria dinamica.\n", ((float)t) / CLOCKS_PER_SEC);
 		SDL_ShowCursor(0); //Se oculta el cursor
 	}
 	catch(const std::exception& e)
 	{
-		cout << "EXCEPTION CAUGHT: " << e.what() << endl;
+		if (languages == 0) {
+			String s = "EXCEPCI√ìN ATRAPADA: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
+		else if (languages == 1) {
+			String s = "EXCEPTION CAUGHT: ";
+			wcout << s.GetWString() << e.what() << endl;
+		}
 	}
 }
 
-/*Inicializa el update de muchas funciÛnes que apenas est·n iniciando*/
+/*Inicializa el update de muchas funci√≥nes que apenas est√°n iniciando*/
 void GameManager::EarlyUpdate()
 {
 	inputMGR->Update();
 }
 
-/*Update es la fucniÛn que actualiza todos los botones y estados del juego*/
+/*Update es la fucni√≥n que actualiza todos los botones y estados del juego*/
 void GameManager::Update()
 {
 	screenMGR->Update();
@@ -139,7 +211,7 @@ void GameManager::MainUpdate()
 }
 
 
-/*FunciÛn que renderiza cada textura dentro del vector de texturas*/
+/*Funci√≥n que renderiza cada textura dentro del vector de texturas*/
 void GameManager::Render()
 {
 
@@ -155,7 +227,7 @@ void GameManager::GetSingletons()
 	try {
 		timer = Timer::getPTR();
 		if (!timer) throw(timer);
-		graphics = Graphics::returnPTR(); //Manda a llamar graphics junto con su funciÛn del apuntado
+		graphics = Graphics::returnPTR(); //Manda a llamar graphics junto con su funci√≥n del apuntado
 		if (!graphics) throw(graphics);
 		StartUp();
 		graphics->Init();
@@ -174,50 +246,113 @@ void GameManager::GetSingletons()
 		if (!screenMGR) throw(screenMGR);
 		screenMGR->Init();
 
-		console = Console::GetPTR();
-		if (!console) throw(console);
+	
 		
 	}
 	catch (Timer * timer) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: TIMER DIDN'T OPEN" << endl;
+
+		if (languages == 0) {
+			String s = "PELIGRO: TIMER NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s = "WARNING: TIMER DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		exit(0);
 	}
 	catch (Graphics * graphics) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: GRAPHICS DIDN'T OPEN" << endl;
+		if (languages == 0) {
+			String s = "PELIGRO: GRAPHICS NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s = "WARNING: GRAPHICS DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		exit(0);
 	}
 	catch (AssetManager * assetM) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: ASSET MANAGER DIDN'T OPEN" << endl;
+		if (languages == 0) {
+			String s = "PELIGRO: ASSET MANAGER NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s ="WARNING: ASSET MANAGER DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		exit(0);
 	}
 	catch (InputManager * inputMGR) {
+		if (languages ==0) {
+			String s = "PELIGRO: INPUT MANAGE NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s = "WARNING: INPUT MANAGER DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: INPUT MANAGER DIDN'T OPEN" << endl;
 		exit(0);
 	}
 	catch (AudioManager * audioMGR) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: AUDIO MANAGER DIDN'T OPEN" << endl;
+		if (languages == 0) {
+			String s = "PELIGRO: AUDIO MANAGER NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s =  "WARNING: AUDIO MANAGER DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		exit(0);
 	}
 	catch (ScreenManager * screenMGR) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: SCREEN MANAGER DIDN'T OPEN" << endl;
+		if (languages == 0) {
+			String s = "PELIGRO: SCREEN MANAGER NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages ==1) {
+			String s = "WARNING: SCREEN MANAGER DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		exit(0);
 	}
 	catch (Console * console) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "WARNING: CONSOLE DIDN'T OPEN" << endl;
+		if (languages == 0) {
+			String s = "PELIGRO: CONSOLE NO PUDO ABRIRSE";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
+		else if (languages == 1) {
+			String s = "WARNING: CONSOLE DIDN'T OPEN";
+			s.PrintWString();
+			console->finalMSG += s.GetWString() + L"\n";
+		}
 		exit(0);
 	}
 }
 
 
 
-//FunciÛn que cierra esta clase y elimina todos los elementos del juego
+//Funci√≥n que cierra esta clase y elimina todos los elementos del juego
 void GameManager::Close()
 {
 	delete ptr;	//Borra el apuntador

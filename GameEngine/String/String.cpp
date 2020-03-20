@@ -46,6 +46,11 @@ void String::operator+=(const string& s)
     wString += convert(s);
 }
 
+void String::operator+=(const wstring& s)
+{
+    wString += s;
+}
+
 /*Sumarle al wstring de la clase, cualquier string que se desee*/
 String String::operator+(const string& s)
 {
@@ -67,6 +72,12 @@ String String::operator+(const wstring& s)
 String String::operator+(const char* s)
 {
     return String(wString += convert(string(s)));
+}
+
+String String::operator+(const char s)
+{
+    string s2(1, s);
+    return String(wString += convert(s2));
 }
 
 /*Convierte un string común y corriente a un wstring, para que acepte todo tipo de caracteres*/
@@ -126,5 +137,10 @@ std::wstring String::GetWString()
 void String::setWString(const wstring& string)
 {
     wString = string;
+}
+
+void String::PrintWString()
+{
+    wcout << wString << endl;
 }
 

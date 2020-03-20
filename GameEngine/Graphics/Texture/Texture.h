@@ -1,3 +1,4 @@
+
 #ifndef TEXTURE_H
 #define TEXTURE_H
 #include "../../GameObject/GameObject.h"
@@ -12,20 +13,20 @@ protected:
 	Graphics* graphics;
 	int width, height;
 	SDL_Rect clippedRect;
+
 public:
 	SDL_Color color;
-	std::string textText;
-	std::string fontPath;
+	std::wstring textText;
+	std::wstring fontPath;
 	Texture();
-	Texture(std::string path);
-	Texture(std::string path, int x, int y, int w, int h, int id);
-	Texture(std::string path, int x, int y, int w, int h);
-	Texture(std::string text, std::string fontPath, int size, SDL_Color color);
-	
+	Texture(std::wstring path);
+	Texture(std::wstring path, int x, int y, int w, int h, int id);
+	Texture(std::wstring path, int x, int y, int w, int h);
+	Texture(std::wstring text, std::wstring fontPath, int size, SDL_Color color);
 	~Texture();
 	int ID;
 	SDL_Rect* rect;
-	std::string GetPath();
+	std::wstring GetPath();
 
 
 	int size;
@@ -35,7 +36,7 @@ public:
 };
 
 
-inline std::string Texture::GetPath()
+inline std::wstring Texture::GetPath()
 {
 	return textText;
 }

@@ -8,6 +8,7 @@
 #include "../../Contenedores/Lista/AssetList.h"
 #include <Windows.h>
 #include "../../Lua/Lua.h"
+#include "../../Console/Console.h"
 class Graphics
 {
 public:
@@ -17,8 +18,8 @@ public:
 	static Graphics* returnPTR();
 	static void Release();
 
-	SDL_Texture* LoadTexture(std::string path, AssetList<SDL_Texture*>& vector);
-	SDL_Texture* CreateTextTexture(TTF_Font* font, std::string text, std::string key, 
+	SDL_Texture* LoadTexture(std::wstring path, AssetList<SDL_Texture*>& vector);
+	SDL_Texture* CreateTextTexture(TTF_Font* font, std::wstring text, std::wstring key, 
 								   AssetList<SDL_Texture*>& textVector, AssetList<TTF_Font*>& fontVector, SDL_Color color);
 	
 	void RenderClear();
@@ -37,7 +38,7 @@ private:
 	static Graphics* ptr;
 	HANDLE hConsole;
 	static bool initialize;
-
+	Console* console;
 
 	Graphics();
 	~Graphics();

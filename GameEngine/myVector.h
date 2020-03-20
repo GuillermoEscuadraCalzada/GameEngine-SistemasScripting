@@ -63,6 +63,7 @@ inline myVector<T>::~myVector()
 	}
 }
 
+/*Se ingresa un elemento al vector*/
 template<class T>
 inline void myVector<T>::push_back(T value)
 {
@@ -116,6 +117,8 @@ inline T* myVector<T>::return_at(string path)
 	return nullptr;
 }
 
+/*Se regresa el string del elemento indicado gracias al índice del parámetro
+ *@param[int index] el índice del elemento que se quiere buscar*/
 template<class T>
 inline std::string* myVector<T>::return_string(int indx)
 {
@@ -139,6 +142,9 @@ inline std::string* myVector<T>::return_string(int indx)
 	}
 }
 
+/*Se regresa un elemento en el índice especificado
+ *@param[ind index] el índice en el que se encuentra una recta
+ *@return regresa el SDL_Rect del objeto*/
 template<class T>
 inline SDL_Rect* myVector<T>::return_at(int index)
 {

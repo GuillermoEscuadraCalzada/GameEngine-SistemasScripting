@@ -8,7 +8,9 @@
 #include "../../MenuInicio/Screens.h"
 #include "../../myVector.h"
 #include <Windows.h>
-
+#include <chrono>
+#include <thread>
+#include <map>
 class GameScreen 
 {
 public:
@@ -20,7 +22,7 @@ public:
 
 	myVector<Texture*>* textureList;
 	AssetList<Primitives*>* primitivesList;
-
+	map<wstring, Primitives*> primitivesMap;
 	void setBackGround(Texture* backGround);
 	void setCharacter(Texture* backGround);
 
@@ -33,17 +35,17 @@ private:
 	bool change = true;
 	int counter = 0;
 	int MoveObject(lua_State* lua);
-	//StackAllocator* stackAllocator;
+	StackAllocator* stackAllocator;
 	InputManager* input;
 	int milisegundos = 0;
 	int segundos = 0;
 	int minutos = 0;
 	float totalTime = 0;
 	Timer* timer;
-	Texture* backGround;
-	HANDLE hConsole;
+	Texture* backGround = nullptr;
+	HANDLE hConsole = nullptr;
 	Texture* character;
-	
+	String s;
 
 };
 #endif // ! GAMESCREEN_H

@@ -44,7 +44,8 @@ void AudioManager::Release()
 	@param[loops] número de veces que se quiere repetir (1 o infinitas)*/
 void AudioManager::PlayMusic(string fileName, int loops)
 {
-	Mix_PlayMusic(assetMNGR->GetMusic(fileName), loops);
+	String s;
+	Mix_PlayMusic(assetMNGR->GetMusic(s.convert(fileName)), loops);
 }
 
 /*Esta función se encargará de pausar la música*/
@@ -67,5 +68,6 @@ void AudioManager::ResumeMusic()
 	@param[channel] "canal" donde se quiere que suene el sfx*/
 void AudioManager::PlaySFX(string fileName, int loops, int channel)
 {
-	Mix_PlayChannel(channel, assetMNGR->GetSFX(fileName), loops);
+	String s;
+	Mix_PlayChannel(channel, assetMNGR->GetSFX(s.convert(fileName)), loops);
 }

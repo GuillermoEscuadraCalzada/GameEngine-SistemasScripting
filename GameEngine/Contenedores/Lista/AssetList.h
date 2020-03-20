@@ -1,6 +1,7 @@
 #ifndef ASSETLIST_H
 #define ASSETLIST_H
 
+#include "../../String/String.h"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -13,7 +14,7 @@ class AssetNode
 public:
 	T val;
 	AssetNode<T>* next;
-	string path;
+	String path;
 	int index;
 	AssetNode<T>(T data) : val(data)
 	{
@@ -21,7 +22,8 @@ public:
 		next = nullptr;
 	};
 	~AssetNode<T>() {};
-
+	int number = 0;
+private: 
 };
 
 template<class T>
@@ -35,11 +37,10 @@ public:
 
 	~AssetList<T>();
 
-	void push_back(string key, T value);
+	void push_back(wstring key, T value);
 	T at(int index);
 
-	T returnTemplate(string key);
-	void pop_back();
+	T returnTemplate(wstring key);
 	void print();
 	void freeMemory();
 
@@ -100,7 +101,7 @@ inline AssetList<T>::~AssetList()
 
 /*Función genérica para hacer push_back de elemenots a una lista/vector*/
 template<class T>
-inline void AssetList<T>::push_back(string key, T value)
+inline void AssetList<T>::push_back(wstring key, T value)
 {
 	try
 	{
@@ -118,12 +119,20 @@ inline void AssetList<T>::push_back(string key, T value)
 		//Si first es igual a last
 		else if(first == last)	
 		{
+			if (temp->path == first->path) {
+				temp->number = first->number + 1;
+				temp->path += to_string(temp->number);
+			}
 			first->next = temp; //El siguiente a first toma el valor de temp
 			last = first->next;	//Last toma el valor de first->next
 		} 
 		//En caso contrario, el siguiente a last es el valor de temp
 		else
 		{
+			if (temp->path == last->path) {
+				temp->number = last->number;
+				temp->path += to_string(temp->number);
+			}
 			last->next = temp;	//El siguiente a last toma el valor de temp
 			last = last->next;	//Last se convierte en last->next
 		}
@@ -165,14 +174,14 @@ inline T AssetList<T>::at(int index)
 	@param[ key ] dirección del elemento de este vector dentro de las carpetas del proyecto
 	@return te regresa el tipo de variable*/
 template<class T>
-inline T AssetList<T>::returnTemplate(string key)
+inline T AssetList<T>::returnTemplate(wstring key)
 {
 	try
 	{
 		AssetNode<T>* iterador = first; //Crea un iterador en l
 		while(iterador != nullptr)
 		{
-			if(iterador->path == key)
+			if(iterador->path.GetWString() == key)
 			{
 				return iterador->val;
 			}
@@ -216,21 +225,6 @@ void AssetList<T>::freeMemory()
 	}
 }
 
-template<class T>
-inline void AssetList<T>::pop_back()
-{
-
-	try
-	{
-
-	} catch(exception & e)
-	{
-		cout << "Exception caught: " << e.what() << endl;
-	} catch(...)
-	{
-
-	}
-}
 
 /*Imprime las direcciones de las texturas o de algun otro elemento*/
 template<class T>
@@ -241,7 +235,7 @@ inline void AssetList<T>::print()
 		AssetNode<T>* iterador = first;
 		while(iterador != nullptr)
 		{
-			cout << "Indice: " + to_string(iterador->index) + "\nPath:\t" + iterador->path + "\n";
+			wcout << L"Indice: " + to_wstring(iterador->index) +  L"\nPath:\t" + iterador->path.GetWString() + L"\n";
 			iterador = iterador->next;
 		}
 	} catch(exception & e)

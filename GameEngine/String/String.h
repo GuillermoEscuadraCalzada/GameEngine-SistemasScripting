@@ -14,12 +14,13 @@ public:
 	void operator=(const char* add);
 	
 	void operator+=(const string& s);
+	void operator+=(const wstring& s);
 	
 	String operator+(const string& s);
 	String operator+(String& s);
 	String operator+(const wstring& s);
 	String operator+(const char* s);
-
+	String operator+(const char s);
 	std::wstring convert(const string& toConvert);
 	String();
 	String(string str);
@@ -28,6 +29,7 @@ public:
 	~String();
 	wstring GetWString();
 	void setWString(const wstring&);
+	void PrintWString();
 private:
 	wstring wString;
 

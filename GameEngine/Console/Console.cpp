@@ -19,8 +19,8 @@ Console::~Console()
 
 void Console::SaveConsole()
 {
-	std::ofstream outfile("../ConsoleError/Console.txt");
+	std::wofstream outfile("../ConsoleError/Console.txt");
 	finalMSG += "ola qué tal";
-	outfile << finalMSG;
+	outfile << finalMSG.GetWString();
 	outfile.close();
 }

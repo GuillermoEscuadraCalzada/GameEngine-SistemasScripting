@@ -10,17 +10,17 @@ using std::string; using std::cout; using std::exception; using std::endl;
 class AssetManager
 {
 public:
-	
+	Console* console;
 	static AssetManager* getPTR();
 	static void Close();
 
-	SDL_Texture* GetTexture(string fileName);
-	SDL_Texture* GetText(string text, string fileName, int size, SDL_Color color);
-	Mix_Music* GetMusic(string fileName);
-	Mix_Chunk* GetSFX(string fileName);
+	SDL_Texture* GetTexture(wstring fileName);
+	SDL_Texture* GetText(wstring text, wstring fileName, int size, SDL_Color color);
+	Mix_Music* GetMusic(wstring fileName);
+	Mix_Chunk* GetSFX(wstring fileName);
 
-	string texture;
-	string text;
+	wstring texture;
+	wstring text;
 	AssetList<SDL_Texture*> GetTextureVector()
 	{
 		return textures;
@@ -35,7 +35,7 @@ private:
 	AssetList<Mix_Music*> music;
 	AssetList<Mix_Chunk*> sfx;
 
-	TTF_Font* GetFont(string fileName, int size);
+	TTF_Font* GetFont(wstring fileName, int size);
 	AssetManager();
 	~AssetManager();
 	

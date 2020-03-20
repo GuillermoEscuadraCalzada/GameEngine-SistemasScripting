@@ -11,6 +11,7 @@
 class GameManager
 {
 public:
+	enum LANGUAGE { SPANISH, ENGLISH};
 	static GameManager* GetPtr();
 	void StartUp();
 	static void Close();
@@ -18,9 +19,8 @@ public:
 #pragma region Updates
 	void MainUpdate();
 #pragma endregion
-	
 
-
+	LANGUAGE languages;
 private: 
 	const int FrameRate = 60.0f;
 

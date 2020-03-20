@@ -1,19 +1,26 @@
 #include "GameScreen.h"
-
+bool createObj = false;
 GameScreen::GameScreen() {
 	timer = Timer::getPTR();	//Busca el apuntador del tiempo
 	input = InputManager::getPtr();	//Busca el apuntador del input
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	textureList = new myVector<Texture*>();
 	primitivesList = new AssetList<Primitives*>();
+	stackAllocator = StackAllocator::getPTR();
 }
 
 GameScreen::~GameScreen()
 {
 	timer = nullptr;
 	input = nullptr;
-	delete backGround;
-	backGround = nullptr;
+	if (backGround) {
+		delete backGround;
+		backGround = nullptr;
+	}
+	if (character) {
+		delete character;
+		character = nullptr;
+	}
 }
 
 void GameScreen::setBackGround(Texture* backGround) {
@@ -34,7 +41,8 @@ Texture* GameScreen::GetBackGround() {
 			throw(backGround); //Lanza un error
 	} catch(Texture * text) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "Este objeto es nulo.\n";
+		String s = "Este objeto es nulo.";
+		s.PrintWString();
 	}
 
 }
@@ -48,38 +56,72 @@ Texture* GameScreen::GetCharacter() {
 			throw(character);
 	} catch(Texture * text) {
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "Este objeto es nulo.\n";
+		String s = "Este objeto es nulo.";
+		s.PrintWString();
 	}
 }
-//
-//int GameScreen::MoveObject(lua_State* lua)
-//{
-//	return 0;
-//}
+
 
 /*Actualización de la pantalla gameScreen, donde suceden todas las acciones del jugador, disminución del tiempo, etc.*/
 void GameScreen::Update()
 {
 	try
 	{
-		input->Update();
-		//if (input->keyPressed(SDL_SCANCODE_SPACE)) {
-		//	Square* sq = new Square();
-		//	sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
-		//	string name;
-		//	cout << "Escribe el nombre de tu objeto\n";
-		//	cin >> name;
-		//	primitivesList->push_back(name, sq);
-		//}
+		//input->Update();
+		if (createObj == false) {
+			s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
+			s.PrintWString();
+			createObj = true;
+		}
+		//std::this_thread::sleep_for(std::chrono::seconds(5));
+		if (input->keyPressed(SDL_SCANCODE_1)) {
+			void* buff = stackAllocator->alloc(sizeof(Square*));
+			Square* sq = new /*(buff)*/ Square();
+			sq->SetUpValues();
+			//Square* sq = new Square();
+			//sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
 
+			wstring name = L"Escribe el nombre de tu objeto\n";
+			wcout << name;
+			wcin >> name;
+			primitivesMap.insert(pair<wstring, Square*>(name, sq));
+
+		    primitivesList->push_back(name, sq);
+			//Circle* circle = new  Circle(10, 400, 400, 200, 100, 50);
+			//primitivesList->push_back(L"Circle", circle);
+			primitivesList->print();
+			createObj = false;
+		}
+		else if (input->keyPressed(SDL_SCANCODE_2)) {
+			void* buff = stackAllocator->alloc(sizeof(Circle*));
+			Circle* circle = new /*(buff)*/ Circle();
+			circle->SetUpValues();
+			wstring name = L"Escribe el nombre de tu objeto\n";
+			wcout << name;
+			wcin >> name;
+			primitivesList->push_back(name, circle);
+			primitivesList->print();
+			createObj = false;
+		}
+		if (primitivesMap.size() > 0) {
+
+		}
+		if (primitivesList->getSize() > 0) {
+			AssetNode<Primitives*>* it = primitivesList->first;
+			while (it != primitivesList->last->next) {
+				it->val->Update();
+				it = it->next;
+			}
+		}
 		input->UpdatePrevInput();
 
 	} catch(std::exception & e){
 		SetConsoleTextAttribute(hConsole, 4);
-		cout << "Exception caught: " << e.what() << std::endl;
+		wcout << "Exception caught: " << e.what() << std::endl;
 	}
 }
 
+/*Se renderizan todos los elementos de la lista de primitivas*/
 void GameScreen::Render()
 {
 	try

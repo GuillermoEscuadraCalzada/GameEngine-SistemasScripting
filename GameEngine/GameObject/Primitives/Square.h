@@ -2,6 +2,7 @@
 #define SQUARE_H
 #include "Primitives.h"
 #include <wincrypt.h>
+using namespace std;
 class Square : public Primitives
 {
 public:
@@ -12,9 +13,15 @@ public:
 	SDL_Rect rect;
 	SDL_Surface* surface;
 	void Render() override;
-	void lua_CreateObject(string fileName);
+	void Update() override;
+	void MoveObject()override;
+	bool OnCollisionDetection(SDL_Rect rect) override;
 
-	void Update();
+	void lua_CreateObject(string fileName);
+	void SetUpValues();
+	void Jump() override;
+	int maxHeight;
+	bool jumping = false;
 };
 
 
