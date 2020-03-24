@@ -44,8 +44,8 @@ void AudioManager::Release()
 	@param[loops] número de veces que se quiere repetir (1 o infinitas)*/
 void AudioManager::PlayMusic(string fileName, int loops)
 {
-	String s;
-	Mix_PlayMusic(assetMNGR->GetMusic(s.convert(fileName)), loops);
+	String s = fileName;
+	Mix_PlayMusic(assetMNGR->GetMusic(s.GetWString()), loops);
 }
 
 /*Esta función se encargará de pausar la música*/

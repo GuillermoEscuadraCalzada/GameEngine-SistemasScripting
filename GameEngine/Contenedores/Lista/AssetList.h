@@ -120,7 +120,9 @@ inline void AssetList<T>::push_back(wstring key, T value)
 		else if(first == last)	
 		{
 			if (temp->path == first->path) {
-				temp->number = first->number + 1;
+				int numb = first->number;
+				numb++;
+				temp->number = numb;
 				temp->path += to_string(temp->number);
 			}
 			first->next = temp; //El siguiente a first toma el valor de temp
@@ -130,7 +132,7 @@ inline void AssetList<T>::push_back(wstring key, T value)
 		else
 		{
 			if (temp->path == last->path) {
-				temp->number = last->number;
+				temp->number = last->number + 1;
 				temp->path += to_string(temp->number);
 			}
 			last->next = temp;	//El siguiente a last toma el valor de temp

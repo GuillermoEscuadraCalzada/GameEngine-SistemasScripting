@@ -180,13 +180,13 @@ void GameManager::MainUpdate()
 {
 	while(!quit)
 	{
+		
 		timer->Update();
 
 		try {
 		//Manda a llamar el sistema de eventos de SDL
 			while (!SDL_PollEvent(&eventHandler))
 			{
-
 				if (eventHandler.type == SDL_QUIT)	//Si se termina el programa, termina el loop
 				{
 					quit = true;
@@ -196,7 +196,6 @@ void GameManager::MainUpdate()
 					quit = true;
 					break; 
 				}
-
 			}
 		}
 		catch (exception & e) {

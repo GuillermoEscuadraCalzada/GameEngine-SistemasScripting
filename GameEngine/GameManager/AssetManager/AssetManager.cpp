@@ -163,12 +163,13 @@ Mix_Music* AssetManager::GetMusic(wstring fileName)
 	{
 		string fullPath = SDL_GetBasePath();	//Consigue el directorio base del archivo
 		String s = fullPath;
-		s.GetWString().append(L"Assets/Music/" + fileName);	//Agrega este string a full path
+		s.GetWString().append(L"Assets/Music/" + s.convert(fullPath));	//Agrega este string a full path
+		
 		Mix_Music* myMusic = music.returnTemplate(s.GetWString());
 		//Busca en lista de música si es que ya existe
 		if( myMusic== nullptr)
 		{
-			myMusic = myMusic = Mix_LoadMUS(fullPath.c_str());	//Crea una variable que sea similar a la música que se encuentra en esta dirección
+			myMusic = Mix_LoadMUS(fullPath.c_str());	//Crea una variable que sea similar a la música que se encuentra en esta dirección
 			//Si sigue siendo nula, imprime un error
 			if(myMusic == nullptr)
 			{

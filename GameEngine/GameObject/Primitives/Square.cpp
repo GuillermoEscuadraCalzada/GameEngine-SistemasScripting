@@ -13,7 +13,6 @@ int lua_CreateSquare(lua_State* lua) {
 		square->position = square->GetPosition();
 		
 		lua_Number width = lua_tonumber(lua, -4); //Recupera este valor de lua
-
 		lua_Number height = lua_tonumber(lua, -3); //Recupera este valor de lua
 		if (width <= 0) {
 			throw(width);
@@ -26,7 +25,27 @@ int lua_CreateSquare(lua_State* lua) {
 		square->rect = { (int)square->position.x - square->width / 2, (int)square->position.y - square->height / 2,square->width, square->height };
 		square->input = InputManager::getPtr();
 		square->graphics = Graphics::returnPTR();
-		square->collider = square->rect;
+		if (lua_tonumber(lua, -7)) {
+			lua_Number r = lua_tonumber(lua, -7);
+			square->r = r;
+		}
+		else {
+			square->r = 100;
+		}
+		if (lua_tonumber(lua, -8)) {
+			lua_Number g = lua_tonumber(lua, -8);
+			square->g = g;
+		}
+		else {
+			square->g = 100;
+		}
+		if (lua_tonumber(lua, -9)) {
+			lua_Number b = lua_tonumber(lua, -9);
+			square->b = b;
+		}
+		else {
+			square->b = 100;
+		}
 		return 1;
 	}
 	catch (int x) {
@@ -160,7 +179,12 @@ void Square::lua_CreateObject(string fileName)
 			lua_register(lua->GetState(), "CreateSquare", lua_CreateSquare);
 			lua_getglobal(lua->GetState(), "CreateLuaSquare"); //Conseguir la función global de lua
 			if (lua_isfunction(lua->GetState(), -1)) {
-				wcout << "Ingrese valores para la creación de su cuadro.\n";
+				String s;	
+				if(console->languages == console->SPANISH)
+					s = "Ingrese valores para la creación de su cuadro por medio de LUA.\n";
+				else if (console->languages == console->ENGLISH)
+					s = "Input the values to create your square via LUA.\n";
+				s.PrintWString();
 				int numb = 400; 
 				wcout << "Pos X: ";
 				cin >> numb;
@@ -185,13 +209,22 @@ void Square::lua_CreateObject(string fileName)
 					throw(numb);
 				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
 				if (lua->CheckLua(lua->GetState(), lua_pcall(lua->GetState(), 4, 1, 0))) {
-					lua_getglobal(lua->GetState(), "square");
-					Square* square = (Square*)lua_touserdata(lua->GetState(), -1);
-					surface = square->surface;
-					this->position = square->position;
-					this->width = square->width; this->height = square->height;
-					this->rect = square->rect;
-					wcout << "Lua created a square\n";
+					
+					if (lua_getglobal(lua->GetState(), "square")) {
+						Square* square = (Square*)lua_touserdata(lua->GetState(), -1);
+						surface = square->surface;
+						this->position = square->position;
+						this->width = square->width; this->height = square->height;
+						this->rect = square->rect;
+						this->r = square->r;
+						this->g = square->g;
+						this->b = square->b;
+						if (console->languages == console->SPANISH)
+							s = "Lua created a square\n";
+						else if (console->languages == console->ENGLISH)
+							s = "Lua created a square\n";
+						s.PrintWString();
+					}
 				}
 			}
 		}
@@ -219,12 +252,115 @@ void Square::lua_CreateObject(string fileName)
 	}
 }
 
+void Square::lua_CreateObject2(string fileName)
+{
+	try {
+
+		/*Checa si existe el archivo de lua con el nombre especificado*/
+		if (lua->CheckLua(lua->GetState(), luaL_dofile(lua->GetState(), fileName.c_str()))) {
+			lua_register(lua->GetState(), "CreateSquare", lua_CreateSquare);
+			lua_getglobal(lua->GetState(), "CreateLuaSquare"); //Conseguir la función global de lua
+			if (lua_isfunction(lua->GetState(), -1)) {
+				String s;
+				if (console->languages == console->SPANISH)
+					s = "Ingrese valores para la creación de su cuadro por medio de LUA.\n";
+				else if (console->languages == console->ENGLISH)
+					s = "Input the values to create your square via LUA.\n";
+				s.PrintWString();
+				int numb = 400;
+				wcout << "Pos X: ";
+				cin >> numb;
+				if (cin.fail()) //Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
+				wcout << "Pos Y: ";
+				cin >> numb;
+				if (cin.fail())//Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb); //Ingresa el valor a lua
+				wcout << "Width: ";
+				numb = 100;
+				cin >> numb;
+
+				if (cin.fail())//Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb); //Ingresa el valor a lua
+				wcout << "Height: ";
+				cin >> numb;
+				if (cin.fail())//Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
+				wcout << "R: ";
+				cin >> numb;
+				if (cin.fail())//Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
+
+				wcout << "G: ";
+				cin >> numb;
+				if (cin.fail())//Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
+
+				wcout << "B: ";
+				cin >> numb;
+				if (cin.fail())//Si el usuario implementa una letra manda error
+					throw(numb);
+				lua_pushnumber(lua->GetState(), numb);//Ingresa el valor a lua
+				if (lua->CheckLua(lua->GetState(), lua_pcall(lua->GetState(), 7, 1, 0))) {
+
+					if (lua_getglobal(lua->GetState(), "square")) {
+						Square* square = (Square*)lua_touserdata(lua->GetState(), -1);
+						surface = square->surface;
+						this->position = square->position;
+						this->width = square->width; this->height = square->height;
+						this->rect = square->rect;
+						this->r = square->r;
+						this->g = square->g;
+						this->b = square->b;
+						if (console->languages == console->SPANISH)
+							s = "Lua creó un cuadrado\n";
+						else if (console->languages == console->ENGLISH)
+							s = "Lua created a square\n";
+						s.PrintWString();
+					}
+				}
+			}
+		}
+	}
+	catch (int x) {
+		String s = "This is a bad input, you need to write a number\n";
+		s.PrintWString();
+		console->finalMSG += s.GetWString();
+	}
+	catch (exception & e) {
+		String s;
+		SetConsoleTextAttribute(handler, 4);
+		if (console->languages == 0) {
+			s = "HUBO UNA EXEPCIÓN";
+			s.PrintWString();
+		}
+		else if (console->languages == 1) {
+			s = "THERE WAS AN EXCEPTION";
+			s.PrintWString();
+		}
+		console->finalMSG += s.GetWString();
+	}
+	catch (...) {
+
+	}
+}
+
 /*Se setean todos los valores del cuadrado por medio de un getline, esto significa posición, tamaño, color, etc.*/
 void Square::SetUpValues()
 {
 	try {
+		String s;
 		SetConsoleTextAttribute(handler, 5);
-		String s = "Ingrese valores para la creación de su cuadro.\n";
+		if(console->languages == console->SPANISH)
+			s = "Ingrese valores para la creación de su cuadro.\n";
+		else if(console->languages == console->ENGLISH)
+			s = "Input the values to create your square.\n";
 		s.PrintWString();
 		int x = 0;
 		SetConsoleTextAttribute(handler, 7);
@@ -252,7 +388,7 @@ void Square::SetUpValues()
 		rect.w = width; rect.h = height; //Se actualizan las dimensiones del cuadrado
 		position.x = rect.x= x - width/2; position.y = rect.y = y - height/2; //Se actualizan las posiciones en del cuadrado }
 		SetConsoleTextAttribute(handler, 2);
-		s =  "Escribe los colores de tu cuadrado en numeros. Solo se pueden de 1 a 3 digitos. (Numero maximo 255, minimo 0)\n";
+		s =  "Escribe los colores de tu cuadrado en números. Sólo se pueden de 1 a 3 digitos. (Número máximo 255, mínimo 0)\n";
 		s.PrintWString();
 		wstring s2;
 		cin.ignore();
@@ -263,8 +399,8 @@ void Square::SetUpValues()
 		getline(wcin, s2);
 		b = stoi(s2);		
 		if (r < 0 || r >255 || g < 0 || g >255 || b < 0 || b >255)
-			throw - 1;
-		SetConsoleTextAttribute(handler, 1);
+			throw(r);
+		SetConsoleTextAttribute(handler, 6);
 		s = "Color: " + to_string((int)r) + ", " + to_string((int)g )+ ", " + to_string((int)b) + ", " + to_string((int)a);
 		s.PrintWString();
 		collider = rect;
@@ -272,12 +408,19 @@ void Square::SetUpValues()
 	catch (int x) {
 		SetConsoleTextAttribute(handler, 4);
 		if (console->languages == 0) {
-			String s = "Hubo un error en tu código! Mal elemento para tu caudrado";
+			String s = "¡Hubo un error en tu código! Mal elemento para tu caudrado.";
 			s.PrintWString();
+			cin.ignore();
+			cin.clear();
+			return;
 		}
 		else if (console->languages == 1) {
-			String s = "There was an error in your code! Wrong element for your square";
+			String s = "There was an error in your code! Wrong element for your squar.e";
 			s.PrintWString();
+			cin.ignore();
+			cin.clear();
+			return;
+
 		}
 	}
 }

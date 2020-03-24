@@ -43,7 +43,6 @@ private:
 	float totalTime = 0;
 	Timer* timer;
 	Texture* backGround = nullptr;
-	HANDLE hConsole = nullptr;
 	Texture* character;
 	String s;
 

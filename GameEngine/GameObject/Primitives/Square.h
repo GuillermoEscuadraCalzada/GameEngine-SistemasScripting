@@ -19,6 +19,7 @@ public:
 	bool OnCollisionDetection(SDL_Rect rect) override;
 	bool setActive = false;
 	void lua_CreateObject(string fileName);
+	void lua_CreateObject2(string fileName);
 	void SetUpValues();
 	int maxHeight;
 	bool jumping = false;

@@ -41,21 +41,17 @@ void GameScreen::CreateObjects()
 			SetConsoleTextAttribute(hConsole, 6);
 
 			if (console->languages == 0)
-				s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
+				s = "\nPresione cualquiera de los siguientes botones dentro de la panalla de juego.\nPresiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.\nPresione el botón 3 para crear un cuadrado por medio de lua con cuatro parámetros.\nPresione el botón 4 para curear un cuadrado por medio de lua con siete parámetros.";
 			else if (console->languages == 1)
-				s = "Press button 1 to create a Square.\nPress button 2 to create a circle.";
+				s = "\nPress one of the following buttons in the game screen\nPress button 1 to create a Square.\nPress button 2 to create a circle.\nPress Button 3 to create circle via lua with 4 parameters.\nPress button 4 to create circle via lua with 7 parameters\n";
 			s.PrintWString();
 			createObj = true;
 		}
 		//std::this_thread::sleep_for(std::chrono::seconds(5));
 		if (input->keyPressed(SDL_SCANCODE_1)) {
-			void* buff = stackAllocator->alloc(sizeof(Square*));
 			Square* sq = new /*(buff)*/ Square();
 			sq->SetUpValues();
-			//Square* sq = new Square();
-			//sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
 			SetConsoleTextAttribute(hConsole, 2);
-
 			wstring name;
 			if (console->languages == 0)
 				name = L"Escribe el nombre de tu objeto\n";
@@ -80,6 +76,34 @@ void GameScreen::CreateObjects()
 			wcout << name;
 			wcin >> name;
 			primitivesList->push_back(name, circle);
+			primitivesList->print();
+			createObj = false;
+		}
+		else if (input->keyPressed(SDL_SCANCODE_3)) {
+			Square* sq = new Square();
+			sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
+			wstring name;
+			if (console->languages == 0)
+				name = L"Escribe el nombre de tu objeto\n";
+			else if (console->languages == 1)
+				name = L"Write the name of your object\n";
+			wcout << name;
+			wcin >> name;
+			primitivesList->push_back(name, sq);
+			primitivesList->print();
+			createObj = false;
+		}
+		else if (input->keyPressed(SDL_SCANCODE_4)) {
+			Square* sq = new Square();
+			sq->lua_CreateObject2("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
+			wstring name;
+			if (console->languages == 0)
+				name = L"Escribe el nombre de tu objeto\n";
+			else if (console->languages == 1)
+				name = L"Write the name of your object\n";
+			wcout << name;
+			wcin >> name;
+			primitivesList->push_back(name, sq);
 			primitivesList->print();
 			createObj = false;
 		}
@@ -132,52 +156,7 @@ void GameScreen::Update()
 	try
 	{
 		input->Update();
-		if (createObj == false) {
-			SetConsoleTextAttribute(hConsole, 6);
-		
-			if (console->languages == 0)
-				s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
-			else if (console->languages == 1)
-				s = "Press button 1 to create a Square.\nPress button 2 to create a circle.";
-			s.PrintWString();
-			createObj = true;
-		}
-		//std::this_thread::sleep_for(std::chrono::seconds(5));
-		if (input->keyPressed(SDL_SCANCODE_1)) {
-			void* buff = stackAllocator->alloc(sizeof(Square*));
-			Square* sq = new /*(buff)*/ Square();
-			sq->SetUpValues();
-			//Square* sq = new Square();
-			//sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
-			SetConsoleTextAttribute(hConsole, 2);
-
-			wstring name;
-			if (console->languages == 0)
-				name = L"Escribe el nombre de tu objeto\n";
-			else if (console->languages == 1)
-				name = L"Write the name of your object\n";
-			wcout << name;
-			wcin >> name;
-		    primitivesList->push_back(name, sq);
-			primitivesList->print();
-			createObj = false;
-		}
-		else if (input->keyPressed(SDL_SCANCODE_2)) {
-			void* buff = stackAllocator->alloc(sizeof(Circle*));
-			Circle* circle = new /*(buff)*/ Circle();
-			circle->SetUpValues();
-			SetConsoleTextAttribute(hConsole, 2);
-			wstring name;
-			if (console->languages == 0)
-				name = L"Escribe el nombre de tu objeto\n";
-			else if (console->languages == 1)
-				name = L"Write the name of your object\n";
-			wcout << name;
-			wcin >> name;
-			primitivesList->push_back(name, circle);
-			primitivesList->print();
-			createObj = false;
-		}
+		CreateObjects();
 		if (primitivesList->getSize() > 0) {
 			AssetNode<Primitives*>* it = primitivesList->first;
 			while (it != primitivesList->last->next) {
@@ -185,6 +164,53 @@ void GameScreen::Update()
 				it = it->next;
 			}
 		}
+		//if (createObj == false) {
+		//	SetConsoleTextAttribute(hConsole, 6);
+		//
+		//	if (console->languages == 0)
+		//		s = "Presiona el botón 1 para crear un cuadrado.\nPresiona el botón 2 para crear un círculo.";
+		//	else if (console->languages == 1)
+		//		s = "Press button 1 to create a Square.\nPress button 2 to create a circle.";
+		//	s.PrintWString();
+		//	createObj = true;
+		//}
+		////std::this_thread::sleep_for(std::chrono::seconds(5));
+		//if (input->keyPressed(SDL_SCANCODE_1)) {
+		//	void* buff = stackAllocator->alloc(sizeof(Square*));
+		//	Square* sq = new /*(buff)*/ Square();
+		//	sq->SetUpValues();
+		//	//Square* sq = new Square();
+		//	//sq->lua_CreateObject("D:/Programación/GameEngine/GameEngine/Lua/Prueba2.lua");
+		//	SetConsoleTextAttribute(hConsole, 2);
+
+		//	wstring name;
+		//	if (console->languages == 0)
+		//		name = L"Escribe el nombre de tu objeto\n";
+		//	else if (console->languages == 1)
+		//		name = L"Write the name of your object\n";
+		//	wcout << name;
+		//	wcin >> name;
+		//    primitivesList->push_back(name, sq);
+		//	primitivesList->print();
+		//	createObj = false;
+		//}
+		//else if (input->keyPressed(SDL_SCANCODE_2)) {
+		//	void* buff = stackAllocator->alloc(sizeof(Circle*));
+		//	Circle* circle = new /*(buff)*/ Circle();
+		//	circle->SetUpValues();
+		//	SetConsoleTextAttribute(hConsole, 2);
+		//	wstring name;
+		//	if (console->languages == 0)
+		//		name = L"Escribe el nombre de tu objeto\n";
+		//	else if (console->languages == 1)
+		//		name = L"Write the name of your object\n";
+		//	wcout << name;
+		//	wcin >> name;
+		//	primitivesList->push_back(name, circle);
+		//	primitivesList->print();
+		//	createObj = false;
+		//}
+		
 		input->UpdatePrevInput();
 
 	} catch(std::exception & e){
@@ -192,10 +218,16 @@ void GameScreen::Update()
 		if (console->languages == 0) {
 			String s = "EXCEPCIÓN ATRAPADA: ";
 			wcout << s.GetWString() << e.what() << endl;
+			cin.ignore();
+			cin.clear();
+			exit(0);
 		}
 		else if (console->languages == 1) {
 			String s = "EXCEPTION CAUGHT: ";
 			wcout << s.GetWString() << e.what() << endl;
+			cin.ignore();
+			cin.clear(0);
+			
 		}
 	}
 }
